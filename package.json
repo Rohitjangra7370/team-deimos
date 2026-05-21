@@ -1,0 +1,12 @@
+{
+  "name": "team-deimos",
+  "version": "1.0.0",
+  "description": "Team Deimos IIT Mandi — Mars Rover Sponsorship Website",
+  "private": true,
+  "dependencies": {
+    "@supabase/supabase-js": "^2.43.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

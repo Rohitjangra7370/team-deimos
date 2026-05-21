@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team Deimos · IIT Mandi · Mars Rover Program 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #080810;
+  --void-2: #0e0e1a;
+  --void-3: #14141f;
+  --oxide: #c14412;
+  --oxide-dim: #8b3010;
+  --oxide-bright: #e05520;
+  --signal: #d4a853;
+  --signal-dim: #a07838;
+  --signal-bright: #f0c06a;
+  --dust: #f5f0e8;
+  --dust-dim: #b8b3ab;
+  --dust-muted: #6e6b65;
+  --grid: rgba(212,168,83,0.06);
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Space Grotesk', sans-serif;
+  --body: 'Instrument Sans', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body { background: var(--void); color: var(--dust); font-family: var(--body); overflow-x: hidden; cursor: none; }
+
+/* CURSOR */
+.cursor { width: 8px; height: 8px; border-radius: 50%; background: var(--signal); position: fixed; top:0;left:0; pointer-events:none; z-index:9999; mix-blend-mode:difference; }
+.cursor-ring { width: 36px; height: 36px; border: 1px solid rgba(212,168,83,0.4); border-radius: 50%; position:fixed; top:0;left:0; pointer-events:none; z-index:9998; transition: width .2s,height .2s,border-color .2s; }
+.cursor-ring.hovering { width:60px;height:60px;border-color:var(--oxide);border-width:2px; }
+
+/* CANVAS */
+#cosmos { position:fixed;inset:0;z-index:0;pointer-events:none; }
+.grid-overlay { position:fixed;inset:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:60px 60px;z-index:1;pointer-events:none;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent); }
+body::before { content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:2;opacity:.4; }
+
+/* NAV */
+nav { position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to bottom,rgba(8,8,16,.92),transparent);backdrop-filter:blur(12px);border-bottom:1px solid rgba(212,168,83,.08); }
+.nav-logo { font-family:var(--mono);font-size:13px;letter-spacing:.2em;color:var(--signal);display:flex;align-items:center;gap:12px; }
+.nav-logo-dot { width:8px;height:8px;border-radius:50%;background:var(--oxide);animation:pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.6)} }
+.nav-links { display:flex;gap:36px;list-style:none; }
+.nav-links a { font-family:var(--mono);font-size:11px;letter-spacing:.15em;color:var(--dust-dim);text-decoration:none;text-transform:uppercase;transition:color .2s;position:relative; }
+.nav-links a::after { content:'';position:absolute;bottom:-4px;left:0;right:100%;height:1px;background:var(--signal);transition:right .3s ease; }
+.nav-links a:hover { color:var(--signal); }
+.nav-links a:hover::after { right:0; }
+.nav-cta { font-family:var(--mono);font-size:11px;letter-spacing:.15em;padding:10px 24px;border:1px solid var(--oxide);color:var(--oxide-bright);text-decoration:none;text-transform:uppercase;transition:all .2s;position:relative;overflow:hidden; }
+.nav-cta::before { content:'';position:absolute;inset:0;background:var(--oxide);transform:scaleX(0);transform-origin:left;transition:transform .25s ease;z-index:-1; }
+.nav-cta:hover { color:var(--dust); }
+.nav-cta:hover::before { transform:scaleX(1); }
+
+/* SECTIONS */
+section { position:relative;z-index:10; }
+
+/* ═══ HERO ═══ */
+#hero { min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:120px 48px 80px;gap:60px;overflow:hidden; }
+.hero-content { }
+.hero-eyebrow { font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--oxide);text-transform:uppercase;margin-bottom:24px;display:flex;align-items:center;gap:16px; }
+.hero-eyebrow::before { content:'';display:inline-block;width:32px;height:1px;background:var(--oxide); }
+.hero-title { font-family:var(--sans);font-size:clamp(52px,7vw,100px);font-weight:700;line-height:.95;letter-spacing:-.03em;color:var(--dust);margin-bottom:24px; }
+.hero-title .highlight { color:var(--signal); }
+.hero-subtitle { font-family:var(--mono);font-size:13px;letter-spacing:.08em;color:var(--dust-dim);margin-bottom:40px;max-width:480px;line-height:1.9; }
+.typewriter-text { border-right:2px solid var(--signal);animation:blink .8s step-end infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.hero-actions { display:flex;gap:20px;align-items:center;margin-bottom:56px; }
+.btn-primary { font-family:var(--mono);font-size:12px;letter-spacing:.15em;text-transform:uppercase;padding:16px 40px;background:var(--oxide);color:var(--dust);border:none;text-decoration:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:12px; }
+.btn-primary:hover { background:var(--oxide-bright);gap:20px; }
+.btn-secondary { font-family:var(--mono);font-size:12px;letter-spacing:.15em;text-transform:uppercase;padding:16px 40px;background:transparent;color:var(--signal);border:1px solid var(--signal-dim);text-decoration:none;cursor:pointer;transition:all .2s; }
+.btn-secondary:hover { border-color:var(--signal);background:rgba(212,168,83,.08); }
+.hero-telemetry { display:flex;gap:36px;flex-wrap:wrap; }
+.telem-item { display:flex;flex-direction:column;gap:4px; }
+.telem-label { font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--dust-muted);text-transform:uppercase; }
+.telem-value { font-family:var(--sans);font-size:24px;font-weight:700;color:var(--signal);letter-spacing:-.02em; }
+.telem-unit { font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--oxide); }
+
+/* ROVER IMAGE */
+.hero-visual { position:relative;display:flex;align-items:center;justify-content:center; }
+.rover-frame { position:relative;width:100%;max-width:560px; }
+.rover-image { width:100%;height:420px;object-fit:cover;object-position:center;display:block;filter:sepia(.15) contrast(1.05) brightness(.95); }
+.rover-frame::before { content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(193,68,18,.15),transparent 50%);z-index:1;pointer-events:none; }
+.rover-frame::after { content:'';position:absolute;inset:0;border:1px solid rgba(212,168,83,.2);z-index:2;pointer-events:none; }
+.rover-hud { position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(8,8,16,.9),transparent);padding:20px 24px;z-index:3;display:flex;gap:24px; }
+.rover-hud-item { font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--dust-dim); }
+.rover-hud-item span { color:var(--signal);display:block;font-size:13px;font-weight:700; }
+.rover-corner { position:absolute;width:16px;height:16px;border-color:var(--signal);border-style:solid;z-index:4; }
+.rover-corner.tl { top:8px;left:8px;border-width:2px 0 0 2px; }
+.rover-corner.tr { top:8px;right:8px;border-width:2px 2px 0 0; }
+.rover-corner.bl { bottom:8px;left:8px;border-width:0 0 2px 2px; }
+.rover-corner.br { bottom:8px;right:8px;border-width:0 2px 2px 0; }
+
+.scroll-hint { position:absolute;bottom:28px;left:48px;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--dust-muted);text-transform:uppercase; }
+.scroll-line { width:48px;height:1px;background:var(--dust-muted);position:relative;overflow:hidden; }
+.scroll-line::after { content:'';position:absolute;inset:0;background:var(--signal);animation:scan 2s ease-in-out infinite;transform:scaleX(0);transform-origin:left; }
+@keyframes scan { 0%{transform:scaleX(0) translateX(0)} 50%{transform:scaleX(1)} 100%{transform:scaleX(0) translateX(100%)} }
+
+/* ═══ STATS ═══ */
+#stats { padding:64px 48px;border-top:1px solid rgba(212,168,83,.1);border-bottom:1px solid rgba(212,168,83,.1);background:rgba(14,14,26,.6);backdrop-filter:blur(20px); }
+.stats-label { font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--oxide);text-transform:uppercase;margin-bottom:40px;display:flex;align-items:center;gap:20px; }
+.stats-label::before,.stats-label::after { content:'';flex:1;height:1px;background:rgba(193,68,18,.25); }
+.stats-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:2px; }
+.stat-card { padding:36px 28px;background:rgba(8,8,16,.8);border:1px solid rgba(212,168,83,.08);position:relative;overflow:hidden;cursor:pointer;transition:all .3s ease; }
+.stat-card::before { content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 100%,rgba(212,168,83,.06),transparent 70%);opacity:0;transition:opacity .3s; }
+.stat-card:hover::before { opacity:1; }
+.stat-card:hover { border-color:rgba(212,168,83,.25);transform:translateY(-2px); }
+.stat-index { font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--dust-muted);margin-bottom:16px; }
+.stat-value { font-family:var(--sans);font-size:48px;font-weight:700;color:var(--signal);letter-spacing:-.03em;line-height:1;margin-bottom:8px;transition:all .3s; }
+.stat-card:hover .stat-value { text-shadow:0 0 30px rgba(212,168,83,.4); }
+.stat-label { font-family:var(--mono);font-size:10px;letter-spacing:.15em;color:var(--dust-muted);text-transform:uppercase;margin-bottom:12px; }
+.stat-desc { font-size:13px;color:var(--dust-dim);line-height:1.6; }
+.stat-bar { margin-top:20px;height:2px;background:rgba(212,168,83,.1); }
+.stat-bar-fill { height:100%;background:linear-gradient(90deg,var(--oxide),var(--signal));width:0%;transition:width 1.5s cubic-bezier(.4,0,.2,1); }
+
+/* ═══ ACHIEVEMENTS ═══ */
+#achievements { padding:100px 48px; }
+.section-label { font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--oxide);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px; }
+.section-label::before { content:'//';color:var(--oxide-dim); }
+.section-title { font-family:var(--sans);font-size:clamp(30px,4vw,52px);font-weight:700;color:var(--dust);letter-spacing:-.02em;margin-bottom:14px;line-height:1.1; }
+.section-subtitle { font-size:15px;color:var(--dust-dim);line-height:1.7;max-width:520px;margin-bottom:56px; }
+.achievements-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:2px; }
+.achievement-card { background:var(--void-2);border:1px solid rgba(212,168,83,.08);padding:44px 36px;position:relative;overflow:hidden;cursor:pointer;transition:all .4s ease; }
+.achievement-card::after { content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--oxide),var(--signal));transform:scaleX(0);transition:transform .4s ease; }
+.achievement-card:hover { border-color:rgba(212,168,83,.2);transform:translateY(-4px); }
+.achievement-card:hover::after { transform:scaleX(1); }
+.achievement-card.featured { background:linear-gradient(135deg,rgba(193,68,18,.1),rgba(212,168,83,.05));border-color:rgba(193,68,18,.25); }
+.achievement-badge { display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--oxide);text-transform:uppercase;padding:5px 14px;border:1px solid rgba(193,68,18,.3);margin-bottom:28px; }
+.achievement-badge.silver { color:#a8b8c8;border-color:rgba(168,184,200,.3); }
+.achievement-rank { font-family:var(--sans);font-size:68px;font-weight:700;color:var(--signal);letter-spacing:-.04em;line-height:1;margin-bottom:8px; }
+.achievement-rank sup { font-size:28px;color:var(--signal-dim); }
+.achievement-event { font-family:var(--sans);font-size:19px;font-weight:600;color:var(--dust);margin-bottom:10px; }
+.achievement-detail { font-family:var(--mono);font-size:11px;color:var(--dust-muted);line-height:1.9; }
+
+/* ═══ BENEFITS TABLE ═══ */
+#benefits { padding:100px 48px;background:var(--void-2);border-top:1px solid rgba(212,168,83,.08); }
+.benefits-table { width:100%;border-collapse:collapse;margin-top:56px; }
+.benefits-table th { font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;padding:16px 24px;text-align:center;border-bottom:1px solid rgba(212,168,83,.15); }
+.benefits-table th:first-child { text-align:left;color:var(--dust-muted); }
+.benefits-table th.platinum { color:#c9d4dc; }
+.benefits-table th.gold { color:var(--signal); }
+.benefits-table th.silver { color:#9eb0bc; }
+.benefits-table th.bronze { color:#cd7f32; }
+.benefits-table td { padding:18px 24px;border-bottom:1px solid rgba(212,168,83,.06);font-size:14px;color:var(--dust-dim);text-align:center; }
+.benefits-table td:first-child { text-align:left;color:var(--dust); }
+.benefits-table tr:hover td { background:rgba(212,168,83,.025); }
+.dot { width:12px;height:12px;border-radius:50%;display:inline-block; }
+.dot.full { background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.4); }
+.dot.partial { background:var(--signal-dim);box-shadow:0 0 8px rgba(160,120,56,.4); }
+.dot.none { background:var(--oxide-dim);box-shadow:0 0 8px rgba(139,48,16,.3); }
+.tier-price-row td { padding:12px 24px;background:rgba(212,168,83,.03); }
+.tier-price { font-family:var(--sans);font-size:20px;font-weight:700;letter-spacing:-.01em; }
+.tier-price.platinum { color:#c9d4dc; }
+.tier-price.gold { color:var(--signal); }
+.tier-price.silver { color:#9eb0bc; }
+.tier-price.bronze { color:#cd7f32; }
+
+/* ═══ SPONSORSHIP TIERS ═══ */
+#sponsorship { padding:100px 48px; }
+.tiers-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:56px; }
+.tier-card { background:var(--void-2);border:1px solid rgba(212,168,83,.08);padding:36px 28px;position:relative;cursor:pointer;transition:all .4s ease;overflow:hidden; }
+.tier-card::before { content:'';position:absolute;top:0;left:0;right:0;height:3px; }
+.tier-card.platinum::before { background:linear-gradient(90deg,#8aa4b4,#c9d4dc,#8aa4b4); }
+.tier-card.gold::before { background:linear-gradient(90deg,var(--signal-dim),var(--signal),var(--signal-bright)); }
+.tier-card.silver::before { background:linear-gradient(90deg,#6a8090,#9eb0bc,#6a8090); }
+.tier-card.bronze::before { background:linear-gradient(90deg,#8b5e2a,#cd7f32,#8b5e2a); }
+.tier-card:hover { transform:translateY(-6px);border-color:rgba(212,168,83,.25); }
+.tier-card.gold { border-color:rgba(212,168,83,.2); }
+.tier-name { font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;margin-bottom:16px; }
+.tier-card.platinum .tier-name { color:#b8d0e4; }
+.tier-card.gold .tier-name { color:var(--signal); }
+.tier-card.silver .tier-name { color:#9eb0bc; }
+.tier-card.bronze .tier-name { color:#cd7f32; }
+.tier-amount { font-family:var(--sans);font-size:32px;font-weight:700;color:var(--dust);letter-spacing:-.02em;margin-bottom:4px; }
+.tier-range { font-family:var(--mono);font-size:11px;color:var(--dust-muted);margin-bottom:28px; }
+.tier-benefits { list-style:none;display:flex;flex-direction:column;gap:10px; }
+.tier-benefits li { font-size:13px;color:var(--dust-dim);padding-left:18px;position:relative;line-height:1.5; }
+.tier-benefits li::before { content:'—';position:absolute;left:0;color:var(--signal-dim); }
+.tier-cta { margin-top:28px;display:block;font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;padding:12px;text-align:center;border:1px solid rgba(212,168,83,.2);color:var(--signal);text-decoration:none;transition:all .2s; }
+.tier-cta:hover { background:rgba(212,168,83,.1);border-color:var(--signal); }
+
+/* ═══ COUNTDOWN ═══ */
+#countdown { padding:72px 48px;background:linear-gradient(135deg,rgba(193,68,18,.08),rgba(212,168,83,.04));border-top:1px solid rgba(193,68,18,.2);border-bottom:1px solid rgba(193,68,18,.2);text-align:center; }
+.countdown-label { font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--oxide);text-transform:uppercase;margin-bottom:36px; }
+.countdown-grid { display:flex;justify-content:center;gap:2px;margin-bottom:32px; }
+.count-unit { background:var(--void);border:1px solid rgba(212,168,83,.12);padding:28px 44px;min-width:130px;position:relative;overflow:hidden; }
+.count-unit::before { content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(212,168,83,.06),transparent 70%); }
+.count-number { font-family:var(--sans);font-size:56px;font-weight:700;color:var(--signal);letter-spacing:-.04em;line-height:1;display:block;position:relative; }
+.count-label { font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--dust-muted);text-transform:uppercase;margin-top:8px;display:block; }
+.countdown-caption { font-family:var(--mono);font-size:12px;color:var(--dust-muted);letter-spacing:.1em; }
+.countdown-caption span { color:var(--oxide); }
+
+/* ═══ TIMELINE ═══ */
+#timeline { padding:100px 48px;background:var(--void-2);border-top:1px solid rgba(212,168,83,.08); }
+.timeline-track { position:relative;padding-left:72px;margin-top:56px; }
+.timeline-track::before { content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--signal-dim) 20%,var(--oxide-dim) 80%,transparent); }
+.timeline-item { position:relative;padding-bottom:56px;cursor:pointer;transition:all .3s; }
+.timeline-item:last-child { padding-bottom:0; }
+.timeline-item:hover { transform:translateX(4px); }
+.timeline-dot { position:absolute;left:-79px;top:4px;width:14px;height:14px;border-radius:50%;border:1px solid var(--signal-dim);background:var(--void);transition:all .3s; }
+.timeline-dot.active { background:var(--signal);border-color:var(--signal);box-shadow:0 0 16px rgba(212,168,83,.6); }
+.timeline-dot.oxide { border-color:var(--oxide); }
+.timeline-dot.future { border-color:rgba(212,168,83,.2); }
+.timeline-item:hover .timeline-dot { border-color:var(--signal); }
+.timeline-date { font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--oxide);text-transform:uppercase;margin-bottom:6px; }
+.timeline-title { font-family:var(--sans);font-size:20px;font-weight:600;color:var(--dust);margin-bottom:8px; }
+.timeline-desc { font-size:14px;color:var(--dust-dim);line-height:1.7;max-width:580px; }
+.timeline-tag { display:inline-block;margin-top:10px;font-family:var(--mono);font-size:10px;letter-spacing:.15em;color:var(--signal);border:1px solid rgba(212,168,83,.2);padding:3px 10px; }
+
+/* ═══ TEAM ═══ */
+#team { padding:100px 48px; }
+.team-subsystems { display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:80px; }
+.subsystem-card { background:var(--void-2);border:1px solid rgba(212,168,83,.08);padding:36px 28px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden; }
+.subsystem-card::after { content:attr(data-count);position:absolute;right:20px;bottom:16px;font-family:var(--sans);font-size:72px;font-weight:700;color:rgba(212,168,83,.04);line-height:1;pointer-events:none;transition:all .3s; }
+.subsystem-card:hover { border-color:rgba(212,168,83,.2);transform:translateY(-3px); }
+.subsystem-card:hover::after { color:rgba(212,168,83,.08); }
+.subsystem-icon { width:44px;height:44px;margin-bottom:20px;color:var(--signal-dim); }
+.subsystem-name { font-family:var(--sans);font-size:19px;font-weight:600;color:var(--dust);margin-bottom:6px; }
+.subsystem-count { font-family:var(--mono);font-size:11px;color:var(--oxide);letter-spacing:.1em;margin-bottom:12px; }
+.subsystem-desc { font-size:13px;color:var(--dust-muted);line-height:1.7; }
+
+/* TEAM PHOTO GRID */
+.team-photos-header { display:flex;align-items:center;justify-content:space-between;margin-bottom:32px; }
+.team-photos-label { font-family:var(--mono);font-size:11px;letter-spacing:.25em;color:var(--oxide);text-transform:uppercase; }
+.team-photos-count { font-family:var(--mono);font-size:11px;color:var(--dust-muted);letter-spacing:.1em; }
+.team-grid { display:grid;grid-template-columns:repeat(8,1fr);gap:2px; }
+.team-member { aspect-ratio:1;background:var(--void-2);border:1px solid rgba(212,168,83,.08);position:relative;overflow:hidden;cursor:pointer;transition:all .3s; }
+.team-member:hover { border-color:rgba(212,168,83,.25);transform:scale(1.04);z-index:2; }
+.team-member-photo { width:100%;height:100%;object-fit:cover;filter:grayscale(.3);transition:filter .3s; }
+.team-member:hover .team-member-photo { filter:grayscale(0); }
+.team-member-overlay { position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,16,.9),transparent 50%);opacity:0;transition:opacity .3s;display:flex;flex-direction:column;justify-content:flex-end;padding:8px; }
+.team-member:hover .team-member-overlay { opacity:1; }
+.team-member-name { font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--dust);text-overflow:ellipsis;overflow:hidden;white-space:nowrap; }
+.team-member-role { font-family:var(--mono);font-size:8px;color:var(--signal-dim);letter-spacing:.05em; }
+
+/* PLACEHOLDER MEMBERS */
+.team-member-placeholder { background:var(--void-2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px; }
+.placeholder-avatar { width:32px;height:32px;border-radius:50%;border:1px solid rgba(212,168,83,.2);display:flex;align-items:center;justify-content:center;color:var(--dust-muted); }
+.placeholder-text { font-family:var(--mono);font-size:8px;color:var(--dust-muted);letter-spacing:.05em;text-align:center;padding:0 4px; }
+.add-member-card { background:transparent;border:1px dashed rgba(212,168,83,.15);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .3s; }
+.add-member-card:hover { border-color:rgba(212,168,83,.35);background:rgba(212,168,83,.03); }
+.add-member-icon { color:var(--signal-dim);margin-bottom:6px; }
+.add-member-text { font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--dust-muted);text-align:center; }
+
+/* ═══ CONTACT ═══ */
+#contact { padding:100px 48px;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start; }
+.contact-info { padding-top:8px; }
+.contact-detail { display:flex;align-items:flex-start;gap:18px;margin-bottom:24px;padding:20px;border:1px solid rgba(212,168,83,.08);transition:border-color .2s;cursor:pointer; }
+.contact-detail:hover { border-color:rgba(212,168,83,.2); }
+.contact-detail-icon { flex-shrink:0;width:38px;height:38px;border:1px solid rgba(193,68,18,.3);display:flex;align-items:center;justify-content:center;color:var(--oxide); }
+.contact-detail-label { font-family:var(--mono);font-size:9px;letter-spacing:.15em;color:var(--dust-muted);text-transform:uppercase;margin-bottom:4px; }
+.contact-detail-value { font-family:var(--mono);font-size:13px;color:var(--dust); }
+.contact-form { background:var(--void-2);border:1px solid rgba(212,168,83,.1);padding:44px; }
+.form-group { margin-bottom:20px; }
+.form-label { display:block;font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--dust-muted);text-transform:uppercase;margin-bottom:7px; }
+.form-input,.form-select,.form-textarea { width:100%;background:var(--void);border:1px solid rgba(212,168,83,.1);color:var(--dust);font-family:var(--mono);font-size:13px;padding:13px 14px;outline:none;transition:border-color .2s;appearance:none; }
+.form-input:focus,.form-select:focus,.form-textarea:focus { border-color:var(--signal-dim); }
+.form-input::placeholder { color:var(--dust-muted); }
+.form-textarea { min-height:100px;resize:vertical; }
+.form-row { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
+.submit-btn { width:100%;font-family:var(--mono);font-size:12px;letter-spacing:.15em;text-transform:uppercase;padding:17px;background:var(--oxide);color:var(--dust);border:none;cursor:pointer;transition:all .2s; }
+.submit-btn:hover:not(:disabled) { background:var(--oxide-bright); }
+.submit-btn:disabled { opacity:.7;cursor:not-allowed; }
+.submit-btn.success { background:var(--signal-dim); }
+.form-msg { margin-top:12px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-align:center;height:16px; }
+.form-msg.success { color:var(--signal); }
+.form-msg.error { color:var(--oxide); }
+
+/* ═══ FOOTER ═══ */
+footer { padding:36px 48px;border-top:1px solid rgba(212,168,83,.08);display:flex;align-items:center;justify-content:space-between; }
+.footer-logo { font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--signal-dim); }
+.footer-coords { font-family:var(--mono);font-size:10px;letter-spacing:.15em;color:var(--dust-muted); }
+.footer-copy { font-family:var(--mono);font-size:10px;color:var(--dust-muted);letter-spacing:.1em; }
+
+/* ANIMATIONS */
+.reveal { opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease; }
+.reveal.visible { opacity:1;transform:translateY(0); }
+.reveal-delay-1 { transition-delay:.1s; }
+.reveal-delay-2 { transition-delay:.2s; }
+.reveal-delay-3 { transition-delay:.3s; }
+
+/* TILT */
+.tilt-card { transform-style:preserve-3d; }
+
+/* GLITCH */
+.glitch { position:relative;display:inline-block; }
+.glitch::before,.glitch::after { content:attr(data-text);position:absolute;inset:0;opacity:0; }
+.glitch:hover::before { animation:glitch-a .4s steps(2) forwards;color:var(--oxide);clip-path:polygon(0 0,100% 0,100% 45%,0 45%); }
+.glitch:hover::after { animation:glitch-b .4s steps(2) forwards;color:var(--signal);clip-path:polygon(0 55%,100% 55%,100% 100%,0 100%); }
+@keyframes glitch-a { 0%,100%{opacity:0;transform:translateX(0)} 20%{opacity:.8;transform:translateX(-4px)} 60%{opacity:.8;transform:translateX(4px)} }
+@keyframes glitch-b { 0%,100%{opacity:0;transform:translateX(0)} 20%{opacity:.8;transform:translateX(4px)} 60%{opacity:.8;transform:translateX(-4px)} }
+
+/* RESPONSIVE */
+@media(max-width:1100px) {
+  #hero { grid-template-columns:1fr;padding:120px 36px 80px; }
+  .hero-visual { display:none; }
+  .stats-grid,.tiers-grid { grid-template-columns:1fr 1fr; }
+  .achievements-grid { grid-template-columns:1fr 1fr; }
+  .team-subsystems { grid-template-columns:1fr 1fr; }
+  #contact { grid-template-columns:1fr; }
+  .team-grid { grid-template-columns:repeat(5,1fr); }
+}
+@media(max-width:768px) {
+  nav { padding:16px 24px; }
+  .nav-links { display:none; }
+  #hero,#stats,#achievements,#benefits,#sponsorship,#countdown,#timeline,#team,#contact { padding:80px 24px; }
+  .stats-grid,.tiers-grid,.achievements-grid,.team-subsystems { grid-template-columns:1fr; }
+  .countdown-grid { flex-wrap:wrap; }
+  footer { flex-direction:column;gap:12px;text-align:center; }
+  .form-row { grid-template-columns:1fr; }
+  .team-grid { grid-template-columns:repeat(4,1fr); }
+}
+@media(prefers-reduced-motion:reduce) {
+  *,::before,::after { animation-duration:.001ms!important;transition-duration:.001ms!important; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<canvas id="cosmos"></canvas>
+<div class="grid-overlay"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><div class="nav-logo-dot"></div>TEAM·DEIMOS</div>
+  <ul class="nav-links">
+    <li><a href="#stats">Mission</a></li>
+    <li><a href="#achievements">Achievements</a></li>
+    <li><a href="#sponsorship">Sponsor</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Partner With Us</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">IIT Mandi · Mars Rover Program · 2026</div>
+    <h1 class="hero-title">
+      <div class="glitch" data-text="TEAM">TEAM</div><br>
+      <span class="highlight glitch" data-text="DEIMOS">DEIMOS</span>
+    </h1>
+    <p class="hero-subtitle"><span class="typewriter-text" id="typewriter"></span></p>
+    <div class="hero-actions">
+      <a href="#sponsorship" class="btn-primary">Become a Sponsor →</a>
+      <a href="https://drive.google.com/file/d/1gIqg--DX5JRoYBds0wN--xZxjA66U468/view?usp=sharing" class="btn-secondary" target="_blank">View Brochure</a>
+    </div>
+    <div class="hero-telemetry">
+      <div class="telem-item">
+        <span class="telem-label">ARC Rank</span>
+        <span class="telem-value">12<sup style="font-size:13px;color:var(--signal-dim)">th</sup></span>
+        <span class="telem-unit">GLOBALLY · FIRST ATTEMPT</span>
+      </div>
+      <div class="telem-item">
+        <span class="telem-label">URC Score</span>
+        <span class="telem-value">74.74</span>
+        <span class="telem-unit">/ 100 · 2026</span>
+      </div>
+      <div class="telem-item">
+        <span class="telem-label">Engineers</span>
+        <span class="telem-value">50+</span>
+        <span class="telem-unit">IIT MANDI</span>
+      </div>
+      <div class="telem-item">
+        <span class="telem-label">ARC Finals</span>
+        <span class="telem-value" style="font-size:18px;">29 JUL</span>
+        <span class="telem-unit">TURKEY · 2026</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="rover-frame">
+      <img src="rover.jpg" alt="Team Deimos Mars Rover" class="rover-image">
+      <div class="rover-corner tl"></div>
+      <div class="rover-corner tr"></div>
+      <div class="rover-corner bl"></div>
+      <div class="rover-corner br"></div>
+      <div class="rover-hud">
+        <div class="rover-hud-item"><span>DEIMOS-IV</span>ROVER ID</div>
+        <div class="rover-hud-item"><span>6-DOF</span>ROBOTIC ARM</div>
+        <div class="rover-hud-item"><span>ORIN NX</span>COMPUTE</div>
+        <div class="rover-hud-item"><span>ROS2</span>STACK</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint"><div class="scroll-line"></div>Scroll to explore</div>
+</section>
+
+<!-- STATS -->
+<section id="stats">
+  <div class="stats-label">Mission Data · Performance Report · 2026</div>
+  <div class="stats-grid">
+    <div class="stat-card reveal tilt-card">
+      <div class="stat-index">01 / COMPETITION</div>
+      <div class="stat-value" data-target="12" data-suffix="th">0</div>
+      <div class="stat-label">ARC Global Rank</div>
+      <div class="stat-desc">12th globally in our very first international attempt at Anatolian Rover Challenge 2026.</div>
+      <div class="stat-bar"><div class="stat-bar-fill" data-width="88"></div></div>
+    </div>
+    <div class="stat-card reveal reveal-delay-1 tilt-card">
+      <div class="stat-index">02 / URC SCORE</div>
+      <div class="stat-value" data-target="74.74" data-suffix="">0</div>
+      <div class="stat-label">URC 2026 Score</div>
+      <div class="stat-desc">Out of 100 at University Rover Challenge. Cutoff: 75.86. Gap: 1.5% — one cycle closes it.</div>
+      <div class="stat-bar"><div class="stat-bar-fill" data-width="96"></div></div>
+    </div>
+    <div class="stat-card reveal reveal-delay-2 tilt-card">
+      <div class="stat-index">03 / NATIONAL</div>
+      <div class="stat-value" data-target="1" data-suffix="">🥉</div>
+      <div class="stat-label">Inter IIT 2025</div>
+      <div class="stat-desc">Bronze Medal — Autonomous Robotics, Inter IIT Tech Meet 2025. All IITs competed nationally.</div>
+      <div class="stat-bar"><div class="stat-bar-fill" data-width="100"></div></div>
+    </div>
+    <div class="stat-card reveal reveal-delay-3 tilt-card">
+      <div class="stat-index">04 / TEAM</div>
+      <div class="stat-value" data-target="50" data-suffix="+">0</div>
+      <div class="stat-label">Engineers</div>
+      <div class="stat-desc">Mechanical · Electrical · Software · Life Sciences · Corporate Relations. 50+ strong.</div>
+      <div class="stat-bar"><div class="stat-bar-fill" data-width="80"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="section-label">Track Record</div>
+  <h2 class="section-title reveal">Built to Compete.<br>Proven to Deliver.</h2>
+  <p class="section-subtitle reveal">Every milestone is a signal — we are closing the gap. One funded upgrade cycle puts us over the URC threshold.</p>
+  <div class="achievements-grid">
+    <div class="achievement-card featured reveal tilt-card">
+      <div class="achievement-badge">ARC 2026 · Turkey</div>
+      <div class="achievement-rank">12<sup>th</sup></div>
+      <div class="achievement-event">Anatolian Rover Challenge</div>
+      <div class="achievement-detail">GLOBALLY · FIRST ATTEMPT<br>FINAL STAGE · 29 JULY 2026<br>BOLU, TURKEY</div>
+    </div>
+    <div class="achievement-card reveal reveal-delay-1 tilt-card">
+      <div class="achievement-badge">URC 2026 · Utah USA</div>
+      <div class="achievement-rank" style="font-size:52px;color:var(--oxide-bright)">74.74</div>
+      <div class="achievement-event">University Rover Challenge</div>
+      <div class="achievement-detail">OUT OF 100 POINTS<br>CUTOFF: 75.86 · GAP: 1.5%<br>MARS DESERT RESEARCH STATION</div>
+    </div>
+    <div class="achievement-card reveal reveal-delay-2 tilt-card">
+      <div class="achievement-badge silver">Inter IIT · 2025</div>
+      <div class="achievement-rank" style="color:#a8b8c8;font-size:60px">🥉</div>
+      <div class="achievement-event">Autonomous Robotics</div>
+      <div class="achievement-detail">BRONZE MEDAL<br>INTER IIT TECH MEET 2025<br>COMPETED AGAINST ALL IITS</div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS TABLE -->
+<section id="benefits">
+  <div class="section-label">Deliverables</div>
+  <h2 class="section-title reveal">What Your Sponsorship<br>Unlocks</h2>
+  <p class="section-subtitle reveal">Every sponsor gets verifiable, documented benefits — logos in competition, media coverage, and technical acknowledgment.</p>
+  <table class="benefits-table reveal">
+    <thead>
+      <tr>
+        <th>Benefit</th>
+        <th class="platinum">Platinum</th>
+        <th class="gold">Gold</th>
+        <th class="silver">Silver</th>
+        <th class="bronze">Bronze</th>
+      </tr>
+      <tr class="tier-price-row">
+        <td style="font-family:var(--mono);font-size:11px;color:var(--dust-muted);letter-spacing:.1em">Investment</td>
+        <td><span class="tier-price platinum">₹1,20,000+</span></td>
+        <td><span class="tier-price gold">₹80,000</span></td>
+        <td><span class="tier-price silver">₹40,000</span></td>
+        <td><span class="tier-price bronze">₹20,000</span></td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Logo on Rover Panel</td>
+        <td><span class="dot full" title="Full"></span></td>
+        <td><span class="dot full" title="Full"></span></td>
+        <td><span class="dot partial" title="Partial"></span></td>
+        <td><span class="dot none" title="Not included"></span></td>
+      </tr>
+      <tr>
+        <td>Logo on Team Apparel</td>
+        <td><span class="dot full"></span></td>
+        <td><span class="dot full"></span></td>
+        <td><span class="dot partial"></span></td>
+        <td><span class="dot none"></span></td>
+      </tr>
+      <tr>
+        <td>Logo on This Website</td>
+        <td><span class="dot full"></span></td>
+        <td><span class="dot full"></span></td>
+        <td><span class="dot full"></span></td>
+        <td><span class="dot full"></span></td>
+      </tr>
+      <tr>
+        <td>Media Exposure (Social + Reports)</td>
+        <td><span class="dot full"></span></td>
+        <td><span class="dot full"></span></td>
+        <td><span class="dot full"></span></td>
+        <td><span class="dot partial"></span></td>
+      </tr>
+      <tr>
+        <td>Branding in Technical Presentations</td>
+        <td><span class="dot full"></span></td>
+        <td><span class="dot full"></span></td>
+        <td><span class="dot partial"></span></td>
+        <td><span class="dot partial"></span></td>
+      </tr>
+      <tr>
+        <td>Technical Integration (Reports + Demos)</td>
+        <td><span class="dot full"></span></td>
+        <td><span class="dot full"></span></td>
+        <td><span class="dot full"></span></td>
+        <td><span class="dot partial"></span></td>
+      </tr>
+      <tr>
+        <td>Certificate of Sponsorship</td>
+        <td><span class="dot full"></span></td>
+        <td><span class="dot full"></span></td>
+        <td><span class="dot full"></span></td>
+        <td><span class="dot full"></span></td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="display:flex;gap:24px;margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--dust-muted)">
+    <span><span class="dot full" style="vertical-align:middle;margin-right:6px"></span>Full Benefit</span>
+    <span><span class="dot partial" style="vertical-align:middle;margin-right:6px"></span>Partial / Limited</span>
+    <span><span class="dot none" style="vertical-align:middle;margin-right:6px"></span>Not Included</span>
+  </div>
+</section>
+
+<!-- SPONSORSHIP TIERS -->
+<section id="sponsorship">
+  <div class="section-label">Partnership Tiers</div>
+  <h2 class="section-title reveal">Your Mark on Mars</h2>
+  <p class="section-subtitle reveal">All sponsors confirmed before 01 July 2026 get full competition branding at ARC Finals, Turkey. CSR Section 135 compliant.</p>
+  <div class="tiers-grid">
+    <div class="tier-card platinum reveal tilt-card">
+      <div class="tier-name">Platinum</div>
+      <div class="tier-amount">₹1,20,000+</div>
+      <div class="tier-range">Maximum visibility · Flagship partner</div>
+      <ul class="tier-benefits">
+        <li>Primary logo on rover body</li>
+        <li>Logo on all team kits + banners</li>
+        <li>Dedicated social campaign (3+ posts)</li>
+        <li>Branding in technical presentations</li>
+        <li>Logo on website (prominent)</li>
+        <li>Certificate of sponsorship</li>
+        <li>Media exposure at ARC Turkey</li>
+      </ul>
+      <a href="mailto:robotronics@students.iitmandi.ac.in?subject=Platinum Sponsorship — Team Deimos" class="tier-cta">Become Platinum Partner</a>
+    </div>
+    <div class="tier-card gold reveal reveal-delay-1 tilt-card">
+      <div class="tier-name">Gold</div>
+      <div class="tier-amount">₹80,000</div>
+      <div class="tier-range">Strong visibility · Core partner</div>
+      <ul class="tier-benefits">
+        <li>Secondary logo on rover</li>
+        <li>Logo on kit + competition banner</li>
+        <li>2 social media posts</li>
+        <li>Branding in presentations</li>
+        <li>Logo on website</li>
+        <li>Certificate of sponsorship</li>
+      </ul>
+      <a href="mailto:robotronics@students.iitmandi.ac.in?subject=Gold Sponsorship — Team Deimos" class="tier-cta">Become Gold Partner</a>
+    </div>
+    <div class="tier-card silver reveal reveal-delay-2 tilt-card">
+      <div class="tier-name">Silver</div>
+      <div class="tier-amount">₹40,000</div>
+      <div class="tier-range">Solid exposure · Supporting partner</div>
+      <ul class="tier-benefits">
+        <li>Logo on team kit</li>
+        <li>1 social media post</li>
+        <li>Logo on website</li>
+        <li>Certificate of sponsorship</li>
+        <li>Technical integration credit</li>
+      </ul>
+      <a href="mailto:robotronics@students.iitmandi.ac.in?subject=Silver Sponsorship — Team Deimos" class="tier-cta">Become Silver Partner</a>
+    </div>
+    <div class="tier-card bronze reveal reveal-delay-3 tilt-card">
+      <div class="tier-name">Bronze</div>
+      <div class="tier-amount">₹20,000</div>
+      <div class="tier-range">Entry tier · Community partner</div>
+      <ul class="tier-benefits">
+        <li>Logo on website</li>
+        <li>Social media mention</li>
+        <li>Certificate of sponsorship</li>
+        <li>Partial media exposure</li>
+      </ul>
+      <a href="mailto:robotronics@students.iitmandi.ac.in?subject=Bronze Sponsorship — Team Deimos" class="tier-cta">Become Bronze Partner</a>
+    </div>
+  </div>
+</section>
+
+<!-- COUNTDOWN -->
+<section id="countdown">
+  <div class="countdown-label">// Mission Clock · ARC Finals · Bolu, Turkey</div>
+  <div class="countdown-grid">
+    <div class="count-unit"><span class="count-number" id="days">00</span><span class="count-label">Days</span></div>
+    <div class="count-unit"><span class="count-number" id="hours">00</span><span class="count-label">Hours</span></div>
+    <div class="count-unit"><span class="count-number" id="minutes">00</span><span class="count-label">Minutes</span></div>
+    <div class="count-unit"><span class="count-number" id="seconds">00</span><span class="count-label">Seconds</span></div>
+  </div>
+  <div class="countdown-caption">Until <span>ARC Finals · 29 July 2026</span> · Your logo competes with us</div>
+</section>
+
+<!-- TIMELINE -->
+<section id="timeline">
+  <div class="section-label">Mission Log</div>
+  <h2 class="section-title reveal">The Road to Mars</h2>
+  <div class="timeline-track">
+    <div class="timeline-item reveal"><div class="timeline-dot active"></div><div class="timeline-date">2025 · National</div><div class="timeline-title">Inter IIT Tech Meet — Bronze Medal</div><div class="timeline-desc">Autonomous Robotics. Competing against all IITs nationally. Software stack validated.</div><div class="timeline-tag">COMPLETED</div></div>
+    <div class="timeline-item reveal reveal-delay-1"><div class="timeline-dot oxide"></div><div class="timeline-date">2026 · International</div><div class="timeline-title">University Rover Challenge — 74.74 / 100</div><div class="timeline-desc">Mars Desert Research Station, Utah. Cutoff 75.86. Gap: 1.5%. Funding closes this gap in one cycle.</div><div class="timeline-tag">SCORE LOCKED</div></div>
+    <div class="timeline-item reveal reveal-delay-2"><div class="timeline-dot active"></div><div class="timeline-date">2026 · Global</div><div class="timeline-title">Anatolian Rover Challenge — 12th Globally</div><div class="timeline-desc">First international attempt. Finals July 29, 2026 — Bolu, Turkey. Competing against world's best.</div><div class="timeline-tag">IN PROGRESS · FINALS</div></div>
+    <div class="timeline-item reveal reveal-delay-3"><div class="timeline-dot future"></div><div class="timeline-date">2026–27 · Objective</div><div class="timeline-title">URC Qualification — The Mission</div><div class="timeline-desc">One funded upgrade cycle. Improved autonomy, depth sensing, arm precision. URC cutoff is within reach. Sponsors activate this mission.</div><div class="timeline-tag">TARGET · SPONSOR TO ACTIVATE</div></div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="section-label">Engineering Force</div>
+  <h2 class="section-title reveal">50+ Engineers.<br>One Mission.</h2>
+  <p class="section-subtitle reveal">Five technical domains. Zero compromise.</p>
+
+  <div class="team-subsystems">
+    <div class="subsystem-card reveal tilt-card" data-count="15">
+      <svg class="subsystem-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      <div class="subsystem-name">Mechanical</div>
+      <div class="subsystem-count">15 ENGINEERS</div>
+      <div class="subsystem-desc">Chassis, suspension, arm, gripper, wheels. CAD → ANSYS → machining pipeline.</div>
+    </div>
+    <div class="subsystem-card reveal reveal-delay-1 tilt-card" data-count="16">
+      <svg class="subsystem-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      <div class="subsystem-name">Electrical</div>
+      <div class="subsystem-count">16 ENGINEERS</div>
+      <div class="subsystem-desc">PCB design, CAN bus, power distribution, motor drivers, Ubiquiti long-range comms.</div>
+    </div>
+    <div class="subsystem-card reveal reveal-delay-2 tilt-card" data-count="7">
+      <svg class="subsystem-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      <div class="subsystem-name">Software</div>
+      <div class="subsystem-count">7 ENGINEERS</div>
+      <div class="subsystem-desc">ROS2, visual SLAM, YOLO v11 detection, inverse kinematics, Docker stack.</div>
+    </div>
+    <div class="subsystem-card reveal tilt-card" data-count="14">
+      <svg class="subsystem-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+      <div class="subsystem-name">Life Sciences</div>
+      <div class="subsystem-count">14 SPECIALISTS</div>
+      <div class="subsystem-desc">Bradford/Ninhydrin assays, biosignature detection, rock classification, soil sampling.</div>
+    </div>
+    <div class="subsystem-card reveal reveal-delay-1 tilt-card" data-count="15">
+      <svg class="subsystem-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      <div class="subsystem-name">Corporate Relations</div>
+      <div class="subsystem-count">15 SPECIALISTS</div>
+      <div class="subsystem-desc">Outreach, sponsorship, media, social channels. Securing the funding that wins competitions.</div>
+    </div>
+    <div class="subsystem-card reveal reveal-delay-2 tilt-card" data-count="∞">
+      <svg class="subsystem-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      <div class="subsystem-name">Institution</div>
+      <div class="subsystem-count">IIT MANDI · EST. 2009</div>
+      <div class="subsystem-desc">Himachal Pradesh, India. 31°44'N 76°59'E. India's premier technical institution backing.</div>
+    </div>
+  </div>
+
+  <!-- TEAM PHOTO GRID -->
+  <div class="team-photos-header">
+    <div class="team-photos-label">// The People · 50+ Members</div>
+    <div class="team-photos-count">Photos coming — send them to add here</div>
+  </div>
+  <div class="team-grid" id="teamGrid">
+    <!-- Placeholder slots — replace with real photos -->
+    <div class="team-member team-member-placeholder tilt-card">
+      <div class="placeholder-avatar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg></div>
+      <div class="placeholder-text">Member</div>
+    </div>
+    <!-- 39 more placeholders -->
+  </div>
+  <div style="margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--dust-muted);letter-spacing:.1em">
+    → Send team member photos to <span style="color:var(--signal)">robotronics@students.iitmandi.ac.in</span> to populate this section
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-info reveal">
+    <div class="section-label">Open Channel</div>
+    <h2 class="section-title" style="margin-bottom:16px">Let's Build<br>Together.</h2>
+    <p style="font-size:15px;color:var(--dust-dim);line-height:1.7;margin-bottom:40px">Ready to put your brand on a Mars rover? We respond within 24 hours.</p>
+    <div class="contact-detail">
+      <div class="contact-detail-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+      <div><div class="contact-detail-label">Email</div><div class="contact-detail-value">robotronics@students.iitmandi.ac.in</div></div>
+    </div>
+    <div class="contact-detail">
+      <div class="contact-detail-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+      <div><div class="contact-detail-label">Location</div><div class="contact-detail-value">IIT Mandi · Himachal Pradesh · 175005</div></div>
+    </div>
+    <div class="contact-detail">
+      <div class="contact-detail-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.7 12.24 19.79 19.79 0 01.63 3.55 2 2 0 012.62 1.36h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 9a16 16 0 006.09 6.09l1.72-.96a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+      <div><div class="contact-detail-label">Sender</div><div class="contact-detail-value">Debendra Prasad Sahoo — Corporate Relations</div></div>
+    </div>
+  </div>
+
+  <div class="contact-form reveal reveal-delay-2">
+    <form id="contactForm">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label" for="fname">First Name *</label><input class="form-input" type="text" id="fname" required placeholder="Rahul"></div>
+        <div class="form-group"><label class="form-label" for="lname">Last Name</label><input class="form-input" type="text" id="lname" placeholder="Sharma"></div>
+      </div>
+      <div class="form-group"><label class="form-label" for="company">Company / Organization *</label><input class="form-input" type="text" id="company" required placeholder="Acme Corp / TCS Foundation"></div>
+      <div class="form-group"><label class="form-label" for="email">Email *</label><input class="form-input" type="email" id="email" required placeholder="you@company.com"></div>
+      <div class="form-group">
+        <label class="form-label" for="tier">Sponsorship Interest</label>
+        <select class="form-select" id="tier">
+          <option value="">Select tier...</option>
+          <option value="Platinum — ₹1,20,000+">Platinum — ₹1,20,000+</option>
+          <option value="Gold — ₹80,000">Gold — ₹80,000</option>
+          <option value="Silver — ₹40,000">Silver — ₹40,000</option>
+          <option value="Bronze — ₹20,000">Bronze — ₹20,000</option>
+          <option value="General Inquiry">General Inquiry</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label" for="message">Message</label><textarea class="form-textarea" id="message" placeholder="Tell us about your organization and how you'd like to partner..."></textarea></div>
+      <button type="submit" class="submit-btn" id="submitBtn">Send Message</button>
+      <div class="form-msg" id="formMsg"></div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">TEAM·DEIMOS · IIT MANDI · MARS ROVER PROGRAM</div>
+  <div class="footer-coords">31°44'18"N · 76°59'10"E · ALT 1044m</div>
+  <div class="footer-copy">© 2026 Team Deimos · IIT Mandi</div>
+</footer>
+
+<script>
+// CURSOR
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.transform=`translate(${mx-4}px,${my-4}px)`;});
+(function animRing(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.transform=`translate(${rx-18}px,${ry-18}px)`;requestAnimationFrame(animRing);})();
+document.querySelectorAll('a,button,.tier-card,.stat-card,.achievement-card,.subsystem-card,.contact-detail,.team-member,.timeline-item').forEach(el=>{
+  el.addEventListener('mouseenter',()=>ring.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>ring.classList.remove('hovering'));
+});
+
+// COSMOS
+const canvas=document.getElementById('cosmos');
+const ctx=canvas.getContext('2d');
+let W,H;
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+const stars=Array.from({length:220},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.4+.2,o:Math.random()*.5+.1,sp:Math.random()*.00018+.00004,tw:Math.random()*Math.PI*2,tws:Math.random()*.018+.004,c:Math.random()>.85?'212,168,83':Math.random()>.7?'193,68,18':'245,240,232'}));
+const dust=Array.from({length:50},()=>({x:Math.random()*1920,y:Math.random()*1080,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:Math.random()*1.8+.4,o:Math.random()*.12+.02,c:Math.random()>.5?'212,168,83':'193,68,18'}));
+let mx2=0,my2=0,t=0;
+document.addEventListener('mousemove',e=>{mx2=e.clientX;my2=e.clientY;});
+function draw(){
+  ctx.clearRect(0,0,W,H);t++;
+  stars.forEach(s=>{
+    s.tw+=s.tws;
+    const ao=s.o*(0.7+0.3*Math.sin(s.tw));
+    const px=((s.x+t*s.sp)%1)*W;const py=s.y*H;
+    const dx=(mx2-W/2)*s.r*.00012;const dy=(my2-H/2)*s.r*.00012;
+    ctx.beginPath();ctx.arc(px+dx,py+dy,s.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${s.c},${ao})`;ctx.fill();
+  });
+  dust.forEach(p=>{
+    p.x+=p.vx+(mx2-W/2)*.00004;p.y+=p.vy+(my2-H/2)*.00004;
+    if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${p.c},${p.o})`;ctx.fill();
+  });
+  if(Math.random()<.003){const sx=Math.random()*W,sy=Math.random()*H*.5,len=Math.random()*90+50;const g=ctx.createLinearGradient(sx,sy,sx+len,sy+len*.3);g.addColorStop(0,'rgba(212,168,83,0)');g.addColorStop(.5,'rgba(212,168,83,.5)');g.addColorStop(1,'rgba(212,168,83,0)');ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(sx+len,sy+len*.3);ctx.strokeStyle=g;ctx.lineWidth=1;ctx.stroke();}
+  requestAnimationFrame(draw);
+}
+draw();
+
+// TYPEWRITER
+const phrases=["Engineering Mars-ready rovers from IIT Mandi.","12th globally. First attempt. ARC 2026.","74.74 / 100 at URC. 1.5% from qualification.","50+ engineers. One mission. One rover.","Your brand on a rover competing at ARC Finals, Turkey."];
+let pi=0,ci=0,del=false;
+const tw=document.getElementById('typewriter');
+function typeLoop(){
+  if(!del){tw.textContent=phrases[pi].substring(0,ci++);if(ci>phrases[pi].length){del=true;setTimeout(typeLoop,2000);return;}}
+  else{tw.textContent=phrases[pi].substring(0,ci--);if(ci===0){del=false;pi=(pi+1)%phrases.length;}}
+  setTimeout(typeLoop,del?32:60);
+}
+typeLoop();
+
+// REVEAL
+const revObs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
+
+// COUNTERS
+const cntObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const el=e.target;const target=parseFloat(el.dataset.target);const suffix=el.dataset.suffix||'';
+    const isD=target%1!==0;let start=0;const dur=1800;const t0=performance.now();
+    (function upd(now){const p=Math.min((now-t0)/dur,1);const ease=1-Math.pow(1-p,4);const v=start+(target-start)*ease;el.innerHTML=isD?v.toFixed(2)+suffix:Math.floor(v)+suffix;if(p<1)requestAnimationFrame(upd);else el.innerHTML=target+suffix;})();
+    cntObs.unobserve(el);
+  });
+},{threshold:.5});
+document.querySelectorAll('[data-target]').forEach(el=>cntObs.observe(el));
+
+// STAT BARS
+const barObs=new IntersectionObserver(entries=>entries.forEach(e=>{if(!e.isIntersecting)return;e.target.querySelectorAll('.stat-bar-fill').forEach(b=>setTimeout(()=>{b.style.width=b.dataset.width+'%';},300));barObs.unobserve(e.target);}),{threshold:.3});
+document.querySelectorAll('.stat-card').forEach(el=>barObs.observe(el));
+
+// TILT
+document.querySelectorAll('.tilt-card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5;const y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(800px) rotateX(${-y*6}deg) rotateY(${x*6}deg) translateY(-4px)`;});
+  card.addEventListener('mouseleave',()=>{card.style.transform='';card.style.transition='transform .4s ease';});
+  card.addEventListener('mouseenter',()=>{card.style.transition='transform .1s ease';});
+});
+
+// COUNTDOWN
+function updateCountdown(){
+  const target=new Date('2026-07-29T09:00:00+03:00');const now=new Date();const diff=target-now;
+  if(diff<=0){['days','hours','minutes','seconds'].forEach(id=>document.getElementById(id).textContent='00');return;}
+  document.getElementById('days').textContent=String(Math.floor(diff/(1000*60*60*24))).padStart(2,'0');
+  document.getElementById('hours').textContent=String(Math.floor((diff%(1000*60*60*24))/(1000*60*60))).padStart(2,'0');
+  document.getElementById('minutes').textContent=String(Math.floor((diff%(1000*60*60))/(1000*60))).padStart(2,'0');
+  document.getElementById('seconds').textContent=String(Math.floor((diff%(1000*60))/1000)).padStart(2,'0');
+}
+updateCountdown();setInterval(updateCountdown,1000);
+
+// BUILD TEAM PLACEHOLDER GRID
+const teamGrid=document.getElementById('teamGrid');
+for(let i=1;i<50;i++){
+  const div=document.createElement('div');
+  div.className='team-member team-member-placeholder tilt-card';
+  div.innerHTML=`<div class="placeholder-avatar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg></div><div class="placeholder-text">Member ${i+1}</div>`;
+  teamGrid.appendChild(div);
+}
+
+// CONTACT FORM → Supabase API
+document.getElementById('contactForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const btn=document.getElementById('submitBtn');
+  const msg=document.getElementById('formMsg');
+  btn.textContent='Sending...';btn.disabled=true;msg.textContent='';msg.className='form-msg';
+  const body={
+    fname:document.getElementById('fname').value,
+    lname:document.getElementById('lname').value,
+    company:document.getElementById('company').value,
+    email:document.getElementById('email').value,
+    tier:document.getElementById('tier').value,
+    message:document.getElementById('message').value,
+  };
+  try{
+    const res=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const data=await res.json();
+    if(res.ok){
+      btn.textContent='Message Sent ✓';btn.classList.add('success');
+      msg.textContent='We received your inquiry and will reply within 24 hours.';msg.className='form-msg success';
+      e.target.reset();
+      setTimeout(()=>{btn.textContent='Send Message';btn.classList.remove('success');btn.disabled=false;msg.textContent='';},4000);
+    }else{throw new Error(data.error||'Submission failed');}
+  }catch(err){
+    btn.textContent='Send Message';btn.disabled=false;
+    msg.textContent='Error: '+err.message+'. Email us directly instead.';msg.className='form-msg error';
+  }
+});
+
+// SCROLL PARALLAX
+window.addEventListener('scroll',()=>{const sy=window.scrollY;const rover=document.querySelector('.rover-frame');if(rover)rover.style.transform=`translateY(${sy*.05}px)`;});
+</script>
+</body>
+</html>
