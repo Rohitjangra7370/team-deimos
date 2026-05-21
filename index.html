@@ -135,17 +135,6 @@ section { position:relative;z-index:10; }
 .hero-visual { position:relative;display:flex;align-items:center;justify-content:center; }
 .hero-3d-scene { position:relative;width:520px;height:520px;display:flex;align-items:center;justify-content:center; }
 #three-canvas { position:absolute;inset:0;z-index:1;border-radius:50%; }
-.rover-frame { position:relative;width:360px;z-index:2; }
-.rover-image { width:100%;height:320px;object-fit:cover;object-position:center;display:block;filter:sepia(.15) contrast(1.05) brightness(.95);border:1px solid rgba(212,168,83,.2); }
-.rover-frame::before { content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(193,68,18,.15),transparent 50%);z-index:1;pointer-events:none; }
-.rover-hud { position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(8,8,16,.9),transparent);padding:16px 20px;z-index:3;display:flex;gap:20px; }
-.rover-hud-item { font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--dust-dim); }
-.rover-hud-item span { color:var(--signal);display:block;font-size:13px;font-weight:700; }
-.rover-corner { position:absolute;width:16px;height:16px;border-color:var(--signal);border-style:solid;z-index:4; }
-.rover-corner.tl { top:8px;left:8px;border-width:2px 0 0 2px; }
-.rover-corner.tr { top:8px;right:8px;border-width:2px 2px 0 0; }
-.rover-corner.bl { bottom:8px;left:8px;border-width:0 0 2px 2px; }
-.rover-corner.br { bottom:8px;right:8px;border-width:0 2px 2px 0; }
 /* Orbit ring decoration */
 .orbit-ring { position:absolute;width:480px;height:480px;border:1px solid rgba(212,168,83,.12);border-radius:50%;animation:spin 20s linear infinite;z-index:0; }
 .orbit-ring::before { content:'';position:absolute;top:-4px;left:50%;width:8px;height:8px;background:var(--signal);border-radius:50%;transform:translateX(-50%);box-shadow:0 0 12px var(--signal); }
@@ -465,19 +454,6 @@ footer { padding:36px 48px;border-top:1px solid rgba(212,168,83,.08);display:fle
       <div class="orbit-ring"></div>
       <div class="orbit-ring-2"></div>
       <canvas id="three-canvas" width="520" height="520"></canvas>
-      <div class="rover-frame">
-        <img src="rover.jpg" alt="Team Deimos DEIMOS-IV Mars Rover — red and black robotic rover with 6-DOF arm, Nvidia Orin NX compute, ROS2 stack" class="rover-image" width="360" height="320" loading="eager">
-        <div class="rover-corner tl"></div>
-        <div class="rover-corner tr"></div>
-        <div class="rover-corner bl"></div>
-        <div class="rover-corner br"></div>
-        <div class="rover-hud">
-          <div class="rover-hud-item"><span>DEIMOS-IV</span>ROVER ID</div>
-          <div class="rover-hud-item"><span>6-DOF</span>ROBOTIC ARM</div>
-          <div class="rover-hud-item"><span>ORIN NX</span>COMPUTE</div>
-          <div class="rover-hud-item"><span>ROS2</span>STACK</div>
-        </div>
-      </div>
     </div>
   </div>
   <div class="scroll-hint" aria-hidden="true"><div class="scroll-line"></div>Scroll to explore</div>
