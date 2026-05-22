@@ -1348,7 +1348,7 @@ document.getElementById('contactForm').addEventListener('submit',async e=>{
 (function(){
   document.querySelectorAll('.hier-av[data-photo]').forEach(function(av){
     var img=new Image();
-    img.onload=function(){av.style.backgroundImage='url('+av.dataset.photo+')';av.classList.add('has-photo');};
+    img.onload=function(){av.style.backgroundImage='url('+av.dataset.photo+')';av.textContent='';};;
     img.src=av.dataset.photo;
   });
 })();
