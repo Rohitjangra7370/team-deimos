@@ -36,7 +36,7 @@ export default async function handler(req, res) {
     body: JSON.stringify({
       from: 'Team Deimos <onboarding@resend.dev>',
       to: ['robotronics@students.iitmandi.ac.in'],
-      cc: ['mb25049@students.iitmandi.ac.in'],
+      cc: ['mb25049@students.iitmandi.ac.in', 'rohitjangra7370@gmail.com'],
       subject: `[Deimos Sponsor Inquiry] ${company} — ${tier || 'General'}`,
       html: `
         <div style="font-family:monospace;background:#080810;color:#f5f0e8;padding:32px;border-radius:8px;border:1px solid rgba(212,168,83,0.2)">
