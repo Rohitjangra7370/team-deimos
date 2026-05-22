@@ -298,51 +298,54 @@ section { position:relative;z-index:10; }
 .subsystem-name { font-family:var(--sans);font-size:19px;font-weight:600;color:var(--dust);margin-bottom:6px; }
 .subsystem-count { font-family:var(--mono);font-size:11px;color:var(--oxide);letter-spacing:.1em;margin-bottom:12px; }
 .subsystem-desc { font-size:13px;color:var(--dust-muted);line-height:1.7; }
-/* ═══ HIERARCHY TREE ═══ */
-@keyframes hier-shimmer { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
-.hier-photo-wrap { position:relative;flex-shrink:0; }
-.hier-photo-wrap::before { content:'';position:absolute;inset:0;border-radius:50%;background:linear-gradient(90deg,rgba(255,255,255,.03) 25%,rgba(255,255,255,.08) 50%,rgba(255,255,255,.03) 75%);background-size:400px 100%;animation:hier-shimmer 1.4s infinite linear;z-index:1;pointer-events:none; }
-.hier-photo-wrap img.loaded + .hier-photo-wrap::before, .hier-photo-wrap img[src]:not([src=""]) { }
+/* ═══ HIERARCHY TREE — redesigned ═══ */
 .hier-tree { margin-top:72px; }
 .hier-lead-row { display:flex;justify-content:center;margin-bottom:0; }
+/* Overall lead card — unchanged */
 .hier-team-lead-card { display:flex;flex-direction:column;align-items:center;gap:16px;padding:32px 48px;background:rgba(212,168,83,.07);border:1px solid rgba(212,168,83,.45);border-radius:4px;position:relative;box-shadow:0 0 40px rgba(212,168,83,.1),0 8px 32px rgba(0,0,0,.5); }
 .hier-team-lead-card::before { content:'TEAM LEAD';position:absolute;top:-11px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:9px;letter-spacing:.25em;color:var(--signal);background:var(--void);padding:2px 16px;border:1px solid rgba(212,168,83,.3); }
 .hier-lead-photo { width:140px;height:140px;border-radius:50%;object-fit:cover;border:2px solid rgba(212,168,83,.6);filter:grayscale(.1);box-shadow:0 0 24px rgba(212,168,83,.2);display:block; }
 .hier-lead-name { font-family:var(--sans);font-size:22px;font-weight:700;color:var(--dust);letter-spacing:.01em; }
 .hier-lead-role { font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--signal);opacity:.85; }
 .hier-connector-v { width:2px;height:56px;background:linear-gradient(to bottom,rgba(212,168,83,.5),rgba(212,168,83,.1));margin:0 auto; }
-.hier-connector-h { display:grid;grid-template-columns:repeat(5,1fr);height:1px;position:relative;margin-bottom:0; }
-.hier-connector-h::before { content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:rgba(212,168,83,.25); }
-.hier-subteams { display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding-top:0; }
-.hier-subteam-col { display:flex;flex-direction:column;background:rgba(8,8,16,.6);border:1px solid rgba(212,168,83,.12);border-radius:4px;overflow:hidden;position:relative;box-shadow:0 4px 20px rgba(0,0,0,.4); }
-.hier-subteam-col::before { content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:40px;background:linear-gradient(to bottom,rgba(212,168,83,.3),transparent); }
-.hier-subteam-header { font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding:14px 16px 12px;display:flex;align-items:center;gap:8px;margin-top:40px;border-bottom:1px solid rgba(255,255,255,.06);font-weight:600; }
-.hier-subteam-header.mech { color:#e8973a;background:rgba(205,127,50,.1);border-top:2px solid #cd7f32; }
-.hier-subteam-header.elec { color:#6faee8;background:rgba(91,155,213,.1);border-top:2px solid #5b9bd5; }
-.hier-subteam-header.soft { color:#86d899;background:rgba(125,201,143,.1);border-top:2px solid #7dc98f; }
-.hier-subteam-header.sci { color:#e06040;background:rgba(193,68,18,.1);border-top:2px solid #c14412; }
-.hier-subteam-header.corp { color:#d4a853;background:rgba(212,168,83,.1);border-top:2px solid rgba(212,168,83,.7); }
-/* Subteam Lead rows — medium card weight */
-.hier-person { display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.04);transition:background .18s; }
-.hier-person:last-child { border-bottom:none; }
-.hier-person:hover { background:rgba(212,168,83,.05); }
-.hier-person.is-lead { background:rgba(212,168,83,.07);border-left:3px solid rgba(212,168,83,.55);padding:14px 14px 14px 12px;gap:14px;border-bottom:1px solid rgba(212,168,83,.1); }
-.hier-person.is-lead:hover { background:rgba(212,168,83,.12); }
-.hier-person-photo { border-radius:50%;object-fit:cover;flex-shrink:0;display:block;filter:grayscale(.2);transition:filter .2s,box-shadow .2s; }
-.hier-person:hover .hier-person-photo { filter:grayscale(0);box-shadow:0 0 10px rgba(212,168,83,.3); }
-/* Subteam lead photo — noticeably larger than members */
-.hier-person-photo.sz-lead { width:64px;height:64px;border:2px solid rgba(212,168,83,.5);box-shadow:0 2px 12px rgba(0,0,0,.5); }
-/* Member photo — compact */
-.hier-person-photo.sz-member { width:34px;height:34px;border:1px solid rgba(212,168,83,.15);filter:grayscale(.35); }
-.hier-person-info { min-width:0;flex:1; }
-/* Lead name larger, member name smaller */
-.hier-person.is-lead .hier-person-name { font-family:var(--sans);font-size:13px;font-weight:700;color:var(--dust);line-height:1.3;word-break:break-word; }
-.hier-person:not(.is-lead) .hier-person-name { font-family:var(--sans);font-size:11px;font-weight:500;color:rgba(245,240,232,.7);line-height:1.3;word-break:break-word; }
-.hier-person-badge { font-family:var(--mono);font-size:8px;letter-spacing:.12em;margin-top:3px;line-height:1; }
-.hier-person.is-lead .hier-person-badge { color:var(--signal); }
-.hier-person:not(.is-lead) .hier-person-badge { color:rgba(245,240,232,.28);font-size:7px; }
-/* Divider between leads and members within a column */
-.hier-members-divider { height:1px;background:rgba(212,168,83,.12);margin:0 12px; }
+/* Subteam grid */
+.hier-subteams { display:grid;grid-template-columns:repeat(5,1fr);gap:12px; }
+.hier-subteam-col { display:flex;flex-direction:column;background:rgba(6,6,14,.7);border:1px solid rgba(212,168,83,.1);border-radius:4px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.5);position:relative; }
+.hier-subteam-col::before { content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:36px;background:linear-gradient(to bottom,rgba(212,168,83,.25),transparent); }
+.hier-subteam-header { font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:12px 14px 10px;display:flex;align-items:center;gap:6px;margin-top:36px;border-bottom:1px solid rgba(255,255,255,.05);font-weight:600; }
+.hier-subteam-header.mech { color:#e8973a;background:rgba(205,127,50,.08);border-top:2px solid #cd7f32; }
+.hier-subteam-header.elec { color:#6faee8;background:rgba(91,155,213,.08);border-top:2px solid #5b9bd5; }
+.hier-subteam-header.soft { color:#86d899;background:rgba(125,201,143,.08);border-top:2px solid #7dc98f; }
+.hier-subteam-header.sci  { color:#e06040;background:rgba(193,68,18,.08);border-top:2px solid #c14412; }
+.hier-subteam-header.corp { color:#d4a853;background:rgba(212,168,83,.08);border-top:2px solid rgba(212,168,83,.65); }
+/* ── Avatar circle (CSS-generated, always renders) ── */
+.hier-av { border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;letter-spacing:.04em;background-size:cover;background-position:center;background-repeat:no-repeat;transition:box-shadow .2s,filter .2s;position:relative;overflow:hidden; }
+/* When photo loads, text becomes transparent */
+.hier-av.has-photo { font-size:0; }
+/* Team colour variants */
+.c-mech { background-color:rgba(205,127,50,.18);border:2px solid rgba(205,127,50,.4);color:#e8973a; }
+.c-elec { background-color:rgba(91,155,213,.18);border:2px solid rgba(91,155,213,.4);color:#6faee8; }
+.c-soft { background-color:rgba(125,201,143,.18);border:2px solid rgba(125,201,143,.4);color:#86d899; }
+.c-sci  { background-color:rgba(193,68,18,.18);border:2px solid rgba(193,68,18,.4);color:#e06040; }
+.c-corp { background-color:rgba(212,168,83,.18);border:2px solid rgba(212,168,83,.4);color:#d4a853; }
+/* Lead avatar — centred vertical card style */
+.hier-av.av-lead { width:64px;height:64px;font-size:18px;box-shadow:0 2px 12px rgba(0,0,0,.5); }
+/* Member avatar — compact */
+.hier-av.av-mem  { width:32px;height:32px;font-size:10px;opacity:.85; }
+/* Lead person — vertical centered card */
+.hier-lead-person { display:flex;flex-direction:column;align-items:center;text-align:center;padding:16px 10px 14px;gap:8px;background:rgba(0,0,0,.25);border-bottom:1px solid rgba(255,255,255,.05);transition:background .18s; }
+.hier-lead-person:hover { background:rgba(212,168,83,.07); }
+.hier-lead-person:hover .hier-av { box-shadow:0 0 14px rgba(212,168,83,.35); }
+.hier-lead-person .hier-pname { font-family:var(--sans);font-size:12px;font-weight:700;color:var(--dust);line-height:1.3; }
+.hier-lead-person .hier-prole { font-family:var(--mono);font-size:7.5px;letter-spacing:.15em;margin-top:1px; }
+/* Member person — horizontal compact row */
+.hier-mem-person { display:flex;align-items:center;gap:9px;padding:7px 12px;border-bottom:1px solid rgba(255,255,255,.03);transition:background .15s; }
+.hier-mem-person:last-child { border-bottom:none; }
+.hier-mem-person:hover { background:rgba(255,255,255,.03); }
+.hier-mem-person .hier-pname { font-family:var(--sans);font-size:11px;font-weight:500;color:rgba(245,240,232,.6);line-height:1.3; }
+.hier-mem-person .hier-prole { font-family:var(--mono);font-size:7px;letter-spacing:.1em;color:rgba(245,240,232,.22);margin-top:1px; }
+/* Section label between leads and members */
+.hier-section-sep { font-family:var(--mono);font-size:7px;letter-spacing:.2em;color:rgba(245,240,232,.18);padding:6px 12px 4px;text-transform:uppercase;border-top:1px solid rgba(255,255,255,.04); }
 
 /* ═══ SPONSOR WALL ═══ */
 #sponsors { padding:80px 48px;background:var(--void-2);border-top:1px solid rgba(212,168,83,.08); }
@@ -887,7 +890,7 @@ footer { padding:48px 48px 36px;border-top:2px solid rgba(212,168,83,.15);backgr
   </div>
   <!-- HIERARCHY TREE -->
   <div class="hier-tree reveal" aria-label="Team hierarchy">
-    <!-- Team Lead -->
+    <!-- Overall Lead -->
     <div class="hier-lead-row">
       <div class="hier-team-lead-card">
         <img class="hier-lead-photo" src="https://drive.google.com/thumbnail?id=1mm34h6OjFq1eBOGSz_z0q3MswZP_2Cul&sz=w300" alt="Niwesh Sah" width="140" height="140" loading="eager">
@@ -896,69 +899,101 @@ footer { padding:48px 48px 36px;border-top:2px solid rgba(212,168,83,.15);backgr
       </div>
     </div>
     <div class="hier-connector-v" aria-hidden="true"></div>
-    <!-- Subteam Columns -->
+
     <div class="hier-subteams" role="list">
 
       <!-- MECHANICAL -->
       <div class="hier-subteam-col" role="listitem">
-        <div class="hier-subteam-header mech">⚙ Mechanical</div>
-        <div class="hier-person is-lead"><img class="hier-person-photo sz-lead" src="https://drive.google.com/thumbnail?id=\1" alt="\2" width="64" height="64" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Rihaansh Saraswat</div><div class="hier-person-badge">LEAD</div></div></div>
-        <div class="hier-person is-lead"><img class="hier-person-photo sz-lead" src="https://drive.google.com/thumbnail?id=\1" alt="\2" width="64" height="64" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Dharmesh Sahu</div><div class="hier-person-badge">MECHANICAL LEAD</div></div></div>
-        <div class="hier-person is-lead"><img class="hier-person-photo sz-lead" src="https://drive.google.com/thumbnail?id=\1" alt="\2" width="64" height="64" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Shubham</div><div class="hier-person-badge">CO-LEAD</div></div></div>
-        <div class="hier-person is-lead"><img class="hier-person-photo sz-lead" src="https://drive.google.com/thumbnail?id=1VjPAP6GbDIEXcvzSyBVe-vo82jb_l68Y&sz=w200" alt="Nirbhik Viswas" width="64" height="64" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Nirbhik Viswas</div><div class="hier-person-badge">LEAD</div></div></div>
-        <div class="hier-members-divider" aria-hidden="true"></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=16hhS7-fwYB8HkQ2VKx7N9Pe0adPofJSt&sz=w100" alt="Shraddha Dash" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Shraddha Dash</div><div class="hier-person-badge">MEMBER</div></div></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=1WMGYpaltLcJ7qY3TX4d9MugrnRrIT4MB&sz=w100" alt="Reyansh" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Reyansh</div><div class="hier-person-badge">MEMBER</div></div></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=1Ql6EsJAyWSE6sPsmphs38zhskXd1Vao4&sz=w100" alt="Harshad Patel" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Harshad Patel</div><div class="hier-person-badge">MEMBER</div></div></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=1Fv8G7-5MNQrv_hv7TXZcNa8lEBIpzDSR&sz=w100" alt="Priyanka Kumari" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Priyanka Kumari</div><div class="hier-person-badge">MEMBER</div></div></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=1UfAztf5zTdS7rKLDXgGZO6wWLvJ-xkQV&sz=w100" alt="P Shanmuka Sai" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">P Shanmuka Sai</div><div class="hier-person-badge">MEMBER</div></div></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=1rRK6uKZEXhXJIgX8MW9HzFvgUdxYeDGu&sz=w100" alt="Krish Jain" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Krish Jain</div><div class="hier-person-badge">MEMBER</div></div></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=1em7hB-zQ8ahrrPbTqFPXHq9Fgu1hatlM&sz=w100" alt="Vedika" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Vedika</div><div class="hier-person-badge">MEMBER</div></div></div>
+        <div class="hier-subteam-header mech">&#9881; Mechanical</div>
+        <div class="hier-lead-person">
+          <div class="hier-av av-lead c-mech" data-photo="https://drive.google.com/thumbnail?id=1h2sbiaSAfeRuufyhtKkmQhTVrrFtOV0Z&sz=w200">RS</div>
+          <div><div class="hier-pname">Rihaansh Saraswat</div><div class="hier-prole" style="color:#e8973a">LEAD</div></div>
+        </div>
+        <div class="hier-lead-person">
+          <div class="hier-av av-lead c-mech" data-photo="https://drive.google.com/thumbnail?id=1l_vRzE506BKey93A3Via3Vmuh-XXZN9O&sz=w200">DS</div>
+          <div><div class="hier-pname">Dharmesh Sahu</div><div class="hier-prole" style="color:#e8973a">MECH LEAD</div></div>
+        </div>
+        <div class="hier-lead-person">
+          <div class="hier-av av-lead c-mech" data-photo="https://drive.google.com/thumbnail?id=1272B2Uz_iyvAS3F7XHuAFnZu5_VhsO8m&sz=w200">SH</div>
+          <div><div class="hier-pname">Shubham</div><div class="hier-prole" style="color:#e8973a">CO-LEAD</div></div>
+        </div>
+        <div class="hier-lead-person">
+          <div class="hier-av av-lead c-mech" data-photo="https://drive.google.com/thumbnail?id=1VjPAP6GbDIEXcvzSyBVe-vo82jb_l68Y&sz=w200">NV</div>
+          <div><div class="hier-pname">Nirbhik Viswas</div><div class="hier-prole" style="color:#e8973a">LEAD</div></div>
+        </div>
+        <div class="hier-section-sep">Members</div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-mech" data-photo="https://drive.google.com/thumbnail?id=16hhS7-fwYB8HkQ2VKx7N9Pe0adPofJSt&sz=w100">SD</div><div><div class="hier-pname">Shraddha Dash</div></div></div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-mech" data-photo="https://drive.google.com/thumbnail?id=1WMGYpaltLcJ7qY3TX4d9MugrnRrIT4MB&sz=w100">RE</div><div><div class="hier-pname">Reyansh</div></div></div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-mech" data-photo="https://drive.google.com/thumbnail?id=1Ql6EsJAyWSE6sPsmphs38zhskXd1Vao4&sz=w100">HP</div><div><div class="hier-pname">Harshad Patel</div></div></div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-mech" data-photo="https://drive.google.com/thumbnail?id=1Fv8G7-5MNQrv_hv7TXZcNa8lEBIpzDSR&sz=w100">PK</div><div><div class="hier-pname">Priyanka Kumari</div></div></div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-mech" data-photo="https://drive.google.com/thumbnail?id=1UfAztf5zTdS7rKLDXgGZO6wWLvJ-xkQV&sz=w100">PS</div><div><div class="hier-pname">P Shanmuka Sai</div></div></div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-mech" data-photo="https://drive.google.com/thumbnail?id=1rRK6uKZEXhXJIgX8MW9HzFvgUdxYeDGu&sz=w100">KJ</div><div><div class="hier-pname">Krish Jain</div></div></div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-mech" data-photo="https://drive.google.com/thumbnail?id=1em7hB-zQ8ahrrPbTqFPXHq9Fgu1hatlM&sz=w100">VE</div><div><div class="hier-pname">Vedika</div></div></div>
       </div>
 
       <!-- ELECTRICAL -->
       <div class="hier-subteam-col" role="listitem">
-        <div class="hier-subteam-header elec">⚡ Electrical</div>
-        <div class="hier-person is-lead"><img class="hier-person-photo sz-lead" src="https://drive.google.com/thumbnail?id=\1" alt="\2" width="64" height="64" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Tanuj</div><div class="hier-person-badge">ELECTRICAL LEAD</div></div></div>
-        <div class="hier-person is-lead"><img class="hier-person-photo sz-lead" src="https://drive.google.com/thumbnail?id=\1" alt="\2" width="64" height="64" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Naman Bhatia</div><div class="hier-person-badge">TEAM LEAD</div></div></div>
-        <div class="hier-person is-lead"><img class="hier-person-photo sz-lead" src="https://drive.google.com/thumbnail?id=\1" alt="\2" width="64" height="64" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Vipin Nokhwal</div><div class="hier-person-badge">ELECTRICAL LEAD</div></div></div>
-        <div class="hier-person is-lead"><img class="hier-person-photo sz-lead" src="https://drive.google.com/thumbnail?id=1bKs_dN1mH5cMy1OVNlHOneX_Xo67jDFi&sz=w200" alt="Parth Ashok Gawande" width="64" height="64" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Parth A. Gawande</div><div class="hier-person-badge">ELECTRICAL HEAD</div></div></div>
-        <div class="hier-members-divider" aria-hidden="true"></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=1gNH2Ahxeow9Sw_4q_c4TRvmy8NvXgiN0&sz=w100" alt="Ritisha Kandhway" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Ritisha Kandhway</div><div class="hier-person-badge">MEMBER</div></div></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=1rXnDKKFQ1qc75zE1XdAUhW0atIOPJkq4&sz=w100" alt="Vedansh Tyagi" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Vedansh Tyagi</div><div class="hier-person-badge">MEMBER</div></div></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=10YRg28-5vaG86HEZ8M_9RmYYVrdBLTWZ&sz=w100" alt="Gaurav Tiwari" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Gaurav Tiwari</div><div class="hier-person-badge">MEMBER</div></div></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=1A8S7WhiWQv7-tzWqG_CvmAgvkfhlANOt&sz=w100" alt="Kanishk Goel" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Kanishk Goel</div><div class="hier-person-badge">CORE MEMBER</div></div></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=1ivhUVJDaWT7GZfk5Q_743HUUBi0yUq0C&sz=w100" alt="Harsh Shankar" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Harsh Shankar</div><div class="hier-person-badge">MEMBER</div></div></div>
+        <div class="hier-subteam-header elec">&#9889; Electrical</div>
+        <div class="hier-lead-person">
+          <div class="hier-av av-lead c-elec" data-photo="https://drive.google.com/thumbnail?id=1FD15Zu-XkPXUga0zhfTR9XsRU0oAF0US&sz=w200">TA</div>
+          <div><div class="hier-pname">Tanuj</div><div class="hier-prole" style="color:#6faee8">ELEC LEAD</div></div>
+        </div>
+        <div class="hier-lead-person">
+          <div class="hier-av av-lead c-elec" data-photo="https://drive.google.com/thumbnail?id=1HAJzQgz7AdSzhakym7E63y5PNYuwALGv&sz=w200">NB</div>
+          <div><div class="hier-pname">Naman Bhatia</div><div class="hier-prole" style="color:#6faee8">TEAM LEAD</div></div>
+        </div>
+        <div class="hier-lead-person">
+          <div class="hier-av av-lead c-elec" data-photo="https://drive.google.com/thumbnail?id=1sY_STj7Tc1D-_k5bprgxWKZj-actsFX3&sz=w200">VN</div>
+          <div><div class="hier-pname">Vipin Nokhwal</div><div class="hier-prole" style="color:#6faee8">ELEC LEAD</div></div>
+        </div>
+        <div class="hier-lead-person">
+          <div class="hier-av av-lead c-elec" data-photo="https://drive.google.com/thumbnail?id=1bKs_dN1mH5cMy1OVNlHOneX_Xo67jDFi&sz=w200">PG</div>
+          <div><div class="hier-pname">Parth A. Gawande</div><div class="hier-prole" style="color:#6faee8">ELEC HEAD</div></div>
+        </div>
+        <div class="hier-section-sep">Members</div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-elec" data-photo="https://drive.google.com/thumbnail?id=1gNH2Ahxeow9Sw_4q_c4TRvmy8NvXgiN0&sz=w100">RK</div><div><div class="hier-pname">Ritisha Kandhway</div></div></div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-elec" data-photo="https://drive.google.com/thumbnail?id=1rXnDKKFQ1qc75zE1XdAUhW0atIOPJkq4&sz=w100">VT</div><div><div class="hier-pname">Vedansh Tyagi</div></div></div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-elec" data-photo="https://drive.google.com/thumbnail?id=10YRg28-5vaG86HEZ8M_9RmYYVrdBLTWZ&sz=w100">GT</div><div><div class="hier-pname">Gaurav Tiwari</div></div></div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-elec" data-photo="https://drive.google.com/thumbnail?id=1A8S7WhiWQv7-tzWqG_CvmAgvkfhlANOt&sz=w100">KG</div><div><div class="hier-pname">Kanishk Goel</div></div></div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-elec" data-photo="https://drive.google.com/thumbnail?id=1ivhUVJDaWT7GZfk5Q_743HUUBi0yUq0C&sz=w100">HS</div><div><div class="hier-pname">Harsh Shankar</div></div></div>
       </div>
 
       <!-- SOFTWARE -->
       <div class="hier-subteam-col" role="listitem">
-        <div class="hier-subteam-header soft">⌨ Software</div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=1duxzx31mbi216KD96THXr9SyhwbP5QfM&sz=w100" alt="Reman Dey" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Reman Dey</div><div class="hier-person-badge">MEMBER</div></div></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=1fWhhPSWTo1XYwbRVxqZ8IFW19X5su9gU&sz=w100" alt="Aman Gupta" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Aman Gupta</div><div class="hier-person-badge">MEMBER</div></div></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=1SIcQu0phtlSA9zuKMY-RIyHmqV1yZehe&sz=w100" alt="Kanika" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Kanika</div><div class="hier-person-badge">MEMBER</div></div></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=1pNUv9mS6P27jCZKkHq9WWxfmUpUap71i&sz=w100" alt="Amit Sahu" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Amit Sahu</div><div class="hier-person-badge">MEMBER</div></div></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=1Oou36cCEUJcWoy69OLwfwFeKpEyuh2Wx&sz=w100" alt="Bhoomika" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Bhoomika</div><div class="hier-person-badge">MEMBER</div></div></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=1jRNbGOxD5C2EeetgGZrFHo_WQX5JgFZ4&sz=w100" alt="Deepak" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Deepak</div><div class="hier-person-badge">MEMBER</div></div></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=1oFmGY3OVlCEFnMGEbyiWdxysns-DcII6&sz=w100" alt="Aarush Jain" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Aarush Jain</div><div class="hier-person-badge">MEMBER</div></div></div>
+        <div class="hier-subteam-header soft">&#9000; Software</div>
+        <div class="hier-section-sep" style="border-top:none;padding-top:10px">Members</div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-soft" data-photo="https://drive.google.com/thumbnail?id=1duxzx31mbi216KD96THXr9SyhwbP5QfM&sz=w100">RD</div><div><div class="hier-pname">Reman Dey</div></div></div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-soft" data-photo="https://drive.google.com/thumbnail?id=1fWhhPSWTo1XYwbRVxqZ8IFW19X5su9gU&sz=w100">AG</div><div><div class="hier-pname">Aman Gupta</div></div></div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-soft" data-photo="https://drive.google.com/thumbnail?id=1SIcQu0phtlSA9zuKMY-RIyHmqV1yZehe&sz=w100">KA</div><div><div class="hier-pname">Kanika</div></div></div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-soft" data-photo="https://drive.google.com/thumbnail?id=1pNUv9mS6P27jCZKkHq9WWxfmUpUap71i&sz=w100">AS</div><div><div class="hier-pname">Amit Sahu</div></div></div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-soft" data-photo="https://drive.google.com/thumbnail?id=1Oou36cCEUJcWoy69OLwfwFeKpEyuh2Wx&sz=w100">BH</div><div><div class="hier-pname">Bhoomika</div></div></div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-soft" data-photo="https://drive.google.com/thumbnail?id=1jRNbGOxD5C2EeetgGZrFHo_WQX5JgFZ4&sz=w100">DE</div><div><div class="hier-pname">Deepak</div></div></div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-soft" data-photo="https://drive.google.com/thumbnail?id=1oFmGY3OVlCEFnMGEbyiWdxysns-DcII6&sz=w100">AJ</div><div><div class="hier-pname">Aarush Jain</div></div></div>
       </div>
 
       <!-- SCIENCE -->
       <div class="hier-subteam-col" role="listitem">
-        <div class="hier-subteam-header sci">🔬 Science</div>
-        <div class="hier-person is-lead"><img class="hier-person-photo sz-lead" src="https://drive.google.com/thumbnail?id=1UauAd1FNbyyi77O1WrWfFfTX-n0Rcyhr&sz=w200" alt="Kabir Jolly" width="64" height="64" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Kabir Jolly</div><div class="hier-person-badge">TEAM LEAD</div></div></div>
-        <div class="hier-members-divider" aria-hidden="true"></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=1i0KnLrMWgMNZ_sMWsm-18pOMGj1l5inw&sz=w100" alt="Aarav Arya" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Aarav Arya</div><div class="hier-person-badge">MEMBER</div></div></div>
-        <div class="hier-person"><img class="hier-person-photo sz-member" src="https://drive.google.com/thumbnail?id=1V9vjABkS1UBjXS4VhZU0qFDefy409dCk&sz=w100" alt="Karmanya" width="34" height="34" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Karmanya</div><div class="hier-person-badge">MEMBER</div></div></div>
+        <div class="hier-subteam-header sci">&#128300; Science</div>
+        <div class="hier-lead-person">
+          <div class="hier-av av-lead c-sci" data-photo="https://drive.google.com/thumbnail?id=1UauAd1FNbyyi77O1WrWfFfTX-n0Rcyhr&sz=w200">KJ</div>
+          <div><div class="hier-pname">Kabir Jolly</div><div class="hier-prole" style="color:#e06040">TEAM LEAD</div></div>
+        </div>
+        <div class="hier-section-sep">Members</div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-sci" data-photo="https://drive.google.com/thumbnail?id=1i0KnLrMWgMNZ_sMWsm-18pOMGj1l5inw&sz=w100">AA</div><div><div class="hier-pname">Aarav Arya</div></div></div>
+        <div class="hier-mem-person"><div class="hier-av av-mem c-sci" data-photo="https://drive.google.com/thumbnail?id=1V9vjABkS1UBjXS4VhZU0qFDefy409dCk&sz=w100">KA</div><div><div class="hier-pname">Karmanya</div></div></div>
       </div>
 
       <!-- CORPORATE RELATIONS -->
       <div class="hier-subteam-col" role="listitem">
-        <div class="hier-subteam-header corp">◈ Corp. Relations</div>
-        <div class="hier-person is-lead"><img class="hier-person-photo sz-lead" src="https://drive.google.com/thumbnail?id=\1" alt="\2" width="64" height="64" loading="lazy"><div class="hier-person-info"><div class="hier-person-name">Debendra P. Sahoo</div><div class="hier-person-badge">LEAD</div></div></div>
+        <div class="hier-subteam-header corp">&#9670; Corp. Relations</div>
+        <div class="hier-lead-person">
+          <div class="hier-av av-lead c-corp" data-photo="https://drive.google.com/thumbnail?id=1wPAKiliDdJX9rTu1smh14Ds4Tw09XRgf&sz=w200">DS</div>
+          <div><div class="hier-pname">Debendra P. Sahoo</div><div class="hier-prole" style="color:#d4a853">LEAD</div></div>
+        </div>
       </div>
 
     </div>
+  </div>
   </div>
 </section>
 
@@ -1309,27 +1344,12 @@ document.getElementById('contactForm').addEventListener('submit',async e=>{
   }catch(err){btn.textContent='Send Message';btn.disabled=false;msg.textContent=`Error: ${err.message}. Email us directly at robotronics@students.iitmandi.ac.in`;msg.className='form-msg error';}
 });
 
-// Hierarchy photo fallback — show initials when Drive image fails to load
+// Load Drive photos into avatar circles on success
 (function(){
-  function initials(alt){
-    return (alt||'?').split(' ').map(w=>w[0]||'').slice(0,2).join('').toUpperCase();
-  }
-  function fallbackSVG(text,size,isLead){
-    const fs=Math.round(size*0.36);
-    const bg=isLead?'rgba(212,168,83,0.18)':'rgba(212,168,83,0.1)';
-    const stroke=isLead?'rgba(212,168,83,0.55)':'rgba(212,168,83,0.25)';
-    return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}'%3E%3Ccircle cx='${size/2}' cy='${size/2}' r='${size/2-1}' fill='${encodeURIComponent(bg)}' stroke='${encodeURIComponent(stroke)}' stroke-width='1.5'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='system-ui,sans-serif' font-size='${fs}' font-weight='600' fill='%23d4a853'%3E${encodeURIComponent(text)}%3C/text%3E%3C/svg%3E`;
-  }
-  document.querySelectorAll('.hier-lead-photo,.hier-person-photo').forEach(function(img){
-    const isLead=img.classList.contains('hier-lead-photo')||img.classList.contains('sz-lead');
-    const size=img.classList.contains('hier-lead-photo')?140:isLead?56:46;
-    const text=initials(img.alt);
-    img.addEventListener('error',function(){
-      this.src=fallbackSVG(text,size,isLead);
-      this.onerror=null;
-    });
-    // Trigger check if already broken (cached error state)
-    if(img.complete&&img.naturalWidth===0) img.dispatchEvent(new Event('error'));
+  document.querySelectorAll('.hier-av[data-photo]').forEach(function(av){
+    var img=new Image();
+    img.onload=function(){av.style.backgroundImage='url('+av.dataset.photo+')';av.classList.add('has-photo');};
+    img.src=av.dataset.photo;
   });
 })();
 </script>
