@@ -356,8 +356,30 @@ section { position:relative;z-index:10; }
 .form-msg.success { color:var(--signal); }
 .form-msg.error { color:var(--oxide); }
 
+/* ═══ COMPETITION ROADMAP ═══ */
+.roadmap-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-top:48px; }
+.roadmap-card { background:rgba(212,168,83,.04);border:1px solid rgba(212,168,83,.12);border-radius:8px;padding:28px 24px;position:relative;overflow:hidden;transition:border-color .3s; }
+.roadmap-card:hover { border-color:rgba(212,168,83,.3); }
+.roadmap-card.active-comp { border-color:rgba(193,68,18,.4);background:rgba(193,68,18,.06); }
+.roadmap-card.active-comp::before { content:'ACTIVE';position:absolute;top:12px;right:12px;font-family:var(--mono);font-size:9px;letter-spacing:.15em;color:var(--oxide);background:rgba(193,68,18,.15);padding:3px 8px;border-radius:2px; }
+.roadmap-date { font-family:var(--mono);font-size:10px;letter-spacing:.15em;color:var(--oxide);margin-bottom:8px; }
+.roadmap-name { font-family:var(--sans);font-size:18px;font-weight:700;color:var(--dust);margin-bottom:4px;line-height:1.2; }
+.roadmap-abbr { font-family:var(--mono);font-size:12px;color:var(--signal);letter-spacing:.1em;margin-bottom:12px; }
+.roadmap-loc { font-family:var(--mono);font-size:10px;color:var(--dust-muted);letter-spacing:.08em; }
+/* ═══ MEDIA PLAN ═══ */
+.mediaplan-phases { display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:48px; }
+.mediaplan-phase { border:1px solid rgba(212,168,83,.1);border-radius:8px;padding:28px 24px; }
+.phase-label { font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--oxide);text-transform:uppercase;margin-bottom:8px; }
+.phase-title { font-family:var(--sans);font-size:18px;font-weight:700;color:var(--signal);margin-bottom:16px; }
+.phase-items { list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px; }
+.phase-items li { font-family:var(--sans);font-size:13px;color:var(--dust-dim);padding-left:16px;position:relative;line-height:1.5; }
+.phase-items li::before { content:'→';position:absolute;left:0;color:var(--oxide);font-size:11px; }
+/* ═══ SOCIAL LINKS ═══ */
+.footer-social { display:flex;gap:16px;align-items:center; }
+.footer-social a { font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--dust-muted);text-decoration:none;transition:color .2s; }
+.footer-social a:hover { color:var(--signal); }
 /* ═══ FOOTER ═══ */
-footer { padding:36px 48px;border-top:1px solid rgba(212,168,83,.08);display:flex;align-items:center;justify-content:space-between; }
+footer { padding:36px 48px;border-top:1px solid rgba(212,168,83,.08);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px; }
 .footer-logo { font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--signal-dim); }
 .footer-coords { font-family:var(--mono);font-size:10px;letter-spacing:.15em;color:var(--dust-muted); }
 .footer-copy { font-family:var(--mono);font-size:10px;color:var(--dust-muted);letter-spacing:.1em; }
@@ -706,6 +728,81 @@ footer { padding:36px 48px;border-top:1px solid rgba(212,168,83,.08);display:fle
   </div>
 </section>
 
+<!-- COMPETITION ROADMAP -->
+<section id="roadmap" aria-labelledby="roadmap-heading">
+  <div class="section-label">Competition Roadmap</div>
+  <h2 class="section-title reveal" id="roadmap-heading">We Compete Aggressively.<br>Your Brand Travels With Us.</h2>
+  <p class="section-subtitle reveal">Continuous international competition ensures sustained partner visibility across multiple seasons and continents.</p>
+  <div class="roadmap-grid reveal">
+    <div class="roadmap-card active-comp">
+      <div class="roadmap-date">SEPT 4–6, 2026 · EUROPE</div>
+      <div class="roadmap-name">European Rover Challenge</div>
+      <div class="roadmap-abbr">ERC 2026</div>
+      <div class="roadmap-loc">Poland · International Stage</div>
+    </div>
+    <div class="roadmap-card">
+      <div class="roadmap-date">JANUARY 2027 · ASIA-PACIFIC</div>
+      <div class="roadmap-name">International Rover Challenge</div>
+      <div class="roadmap-abbr">IRC 2027</div>
+      <div class="roadmap-loc">One of the largest space robotics competitions in Asia-Pacific</div>
+    </div>
+    <div class="roadmap-card">
+      <div class="roadmap-date">MAY 27–30, 2027 · USA</div>
+      <div class="roadmap-name">University Rover Challenge</div>
+      <div class="roadmap-abbr">URC 2027 <span style="font-size:9px;color:var(--dust-muted)">· Tentative</span></div>
+      <div class="roadmap-loc">Mars Desert Research Station · Utah</div>
+    </div>
+    <div class="roadmap-card">
+      <div class="roadmap-date">ONGOING</div>
+      <div class="roadmap-name">Other International Events</div>
+      <div class="roadmap-abbr">ARC · IRoC · IRoCU · CIRC</div>
+      <div class="roadmap-loc">As announced · Multiple continents</div>
+    </div>
+  </div>
+</section>
+
+<!-- MEDIA PLAN -->
+<section id="mediaplan" aria-labelledby="mediaplan-heading">
+  <div class="section-label">Content Deliverables</div>
+  <h2 class="section-title reveal" id="mediaplan-heading">What Your Sponsorship<br>Looks Like in the World.</h2>
+  <p class="section-subtitle reveal">Structured across three competition phases — 11 planned deliverables from brand integration on day one through international competition recap.</p>
+  <div class="mediaplan-phases reveal">
+    <div class="mediaplan-phase">
+      <div class="phase-label">Phase 1 · April – June 2026</div>
+      <div class="phase-title">ERC Season</div>
+      <ul class="phase-items" role="list">
+        <li>Logo on apparel, website, pitch decks — from day one</li>
+        <li>Official partnership announcement campaign on Instagram &amp; LinkedIn</li>
+        <li>ERC 2026 qualification video featuring your brand (YouTube + jury submission)</li>
+        <li>Talent pipeline access — share internship &amp; full-time openings with our engineers</li>
+        <li>Beta testing &amp; technical feedback for your hardware/products</li>
+        <li>Faculty Advisor acknowledgement letter</li>
+      </ul>
+    </div>
+    <div class="mediaplan-phase">
+      <div class="phase-label">Phase 2 · July – November 2026</div>
+      <div class="phase-title">IRC Build Season</div>
+      <ul class="phase-items" role="list">
+        <li>Unboxing &amp; setup video for sponsored hardware (YouTube)</li>
+        <li>Technical workshop &amp; livestream at IIT Mandi — your brand featured</li>
+        <li>Mid-season manufacturing deep-dive series (YouTube, Instagram, LinkedIn)</li>
+        <li>IRC 2027 SDDR video with explicit sponsor integration</li>
+      </ul>
+    </div>
+    <div class="mediaplan-phase">
+      <div class="phase-label">Phase 3 · December 2026 – June 2027</div>
+      <div class="phase-title">URC Push</div>
+      <ul class="phase-items" role="list">
+        <li>URC 2027 SAR video — sponsor contribution highlighted in technical review</li>
+        <li>Xpecto 2027 (IIT Mandi Tech Fest) — physical showcase, 2,500+ attendees</li>
+        <li>URC Utah on-ground brand deployment — rover + pit station</li>
+        <li>Final competition recap video (YouTube) — ultimate performance testimonial</li>
+      </ul>
+    </div>
+  </div>
+  <p class="section-subtitle reveal" style="margin-top:32px;font-size:13px">Content formats, platforms, and deliverable specifics are flexible — we adapt to what works best for your brand.</p>
+</section>
+
 <!-- TEAM -->
 <section id="team" aria-labelledby="team-heading">
   <div class="section-label">Engineering Force</div>
@@ -872,7 +969,12 @@ footer { padding:36px 48px;border-top:1px solid rgba(212,168,83,.08);display:fle
 
 <footer role="contentinfo">
   <div class="footer-logo">TEAM·DEIMOS · IIT MANDI · MARS ROVER PROGRAM</div>
-  <div class="footer-coords">31°44'18"N · 76°59'10"E · ALT 1044m</div>
+  <div class="footer-social" aria-label="Social media channels">
+    <a href="https://www.linkedin.com/company/iit-mandi-mars-rover-team/" target="_blank" rel="noopener noreferrer" aria-label="Team Deimos LinkedIn">LINKEDIN</a>
+    <a href="https://www.instagram.com/teamdeimos" target="_blank" rel="noopener noreferrer" aria-label="Team Deimos Instagram">INSTAGRAM</a>
+    <a href="https://www.instagram.com/robotronics.iitmandi" target="_blank" rel="noopener noreferrer" aria-label="Robotronics Club Instagram">ROBOTRONICS</a>
+    <a href="https://www.youtube.com/@therobotronicsclubiitmandi1378" target="_blank" rel="noopener noreferrer" aria-label="Robotronics Club YouTube">YOUTUBE</a>
+  </div>
   <div class="footer-copy">© 2026 Team Deimos · IIT Mandi</div>
 </footer>
 
