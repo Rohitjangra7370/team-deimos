@@ -268,6 +268,8 @@ section { position:relative;z-index:10; }
 
 /* ═══ TIMELINE ═══ */
 #timeline { padding:100px 48px;background:var(--void-2);border-top:1px solid rgba(212,168,83,.08); }
+#roadmap { padding:100px 48px;border-top:1px solid rgba(212,168,83,.08); }
+#mediaplan { padding:100px 48px;background:var(--void-2);border-top:1px solid rgba(212,168,83,.06);border-bottom:1px solid rgba(212,168,83,.06); }
 .timeline-track { position:relative;padding-left:72px;margin-top:56px; }
 .timeline-track::before { content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--signal-dim) 20%,var(--oxide-dim) 80%,transparent); }
 .timeline-item { position:relative;padding-bottom:56px;cursor:pointer;transition:all .3s; }
@@ -412,7 +414,7 @@ footer { padding:36px 48px;border-top:1px solid rgba(212,168,83,.08);display:fle
 @media(max-width:768px) {
   nav { padding:16px 24px; }
   .nav-links { display:none; }
-  #hero,#stats,#achievements,#benefits,#sponsorship,#countdown,#timeline,#team,#contact,#reach,#inkind,#sponsors,#trust { padding:80px 24px; }
+  #hero,#stats,#achievements,#benefits,#sponsorship,#countdown,#timeline,#roadmap,#mediaplan,#team,#contact,#reach,#inkind,#sponsors,#trust { padding:80px 24px; }
   .stats-grid,.tiers-grid,.achievements-grid,.team-subsystems { grid-template-columns:1fr; }
   .countdown-grid { flex-wrap:wrap; }
   footer { flex-direction:column;gap:12px;text-align:center; }
