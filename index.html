@@ -1298,6 +1298,30 @@ document.getElementById('contactForm').addEventListener('submit',async e=>{
     else{throw new Error(data.error||'Server error');}
   }catch(err){btn.textContent='Send Message';btn.disabled=false;msg.textContent=`Error: ${err.message}. Email us directly at robotronics@students.iitmandi.ac.in`;msg.className='form-msg error';}
 });
+
+// Hierarchy photo fallback — show initials when Drive image fails to load
+(function(){
+  function initials(alt){
+    return (alt||'?').split(' ').map(w=>w[0]||'').slice(0,2).join('').toUpperCase();
+  }
+  function fallbackSVG(text,size,isLead){
+    const fs=Math.round(size*0.36);
+    const bg=isLead?'rgba(212,168,83,0.18)':'rgba(212,168,83,0.1)';
+    const stroke=isLead?'rgba(212,168,83,0.55)':'rgba(212,168,83,0.25)';
+    return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}'%3E%3Ccircle cx='${size/2}' cy='${size/2}' r='${size/2-1}' fill='${encodeURIComponent(bg)}' stroke='${encodeURIComponent(stroke)}' stroke-width='1.5'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='system-ui,sans-serif' font-size='${fs}' font-weight='600' fill='%23d4a853'%3E${encodeURIComponent(text)}%3C/text%3E%3C/svg%3E`;
+  }
+  document.querySelectorAll('.hier-lead-photo,.hier-person-photo').forEach(function(img){
+    const isLead=img.classList.contains('hier-lead-photo')||img.classList.contains('sz-lead');
+    const size=img.classList.contains('hier-lead-photo')?140:isLead?56:46;
+    const text=initials(img.alt);
+    img.addEventListener('error',function(){
+      this.src=fallbackSVG(text,size,isLead);
+      this.onerror=null;
+    });
+    // Trigger check if already broken (cached error state)
+    if(img.complete&&img.naturalWidth===0) img.dispatchEvent(new Event('error'));
+  });
+})();
 </script>
 </body>
 </html>
