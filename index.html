@@ -79,11 +79,20 @@
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; font-size: 16px; }
-body { background: var(--void); color: var(--dust); font-family: var(--body); overflow-x: hidden; cursor: none; }
+body { background: var(--void); color: var(--dust); font-family: var(--body); overflow-x: hidden; }
+@media (pointer: fine) { body { cursor: none; } }
 
 /* SKIP LINK */
 .skip-link { position:absolute;top:-40px;left:0;background:var(--oxide);color:var(--dust);padding:8px 16px;z-index:10000;font-family:var(--mono);font-size:12px;text-decoration:none; }
 .skip-link:focus { top:0; }
+
+/* FOCUS */
+:focus-visible { outline: 2px solid var(--signal);outline-offset: 3px; }
+.form-input:focus-visible,.form-select:focus-visible,.form-textarea:focus-visible { outline: 2px solid var(--signal);outline-offset: 0; }
+a:focus-visible,button:focus-visible { outline: 2px solid var(--signal);outline-offset: 3px; }
+
+/* TOUCH */
+a, button, [role="button"] { touch-action: manipulation; }
 
 /* CURSOR */
 .cursor { width:8px;height:8px;border-radius:50%;background:var(--signal);position:fixed;top:0;left:0;pointer-events:none;z-index:9999;mix-blend-mode:difference; }
@@ -1019,10 +1028,10 @@ footer { padding:48px 48px 36px;border-top:2px solid rgba(212,168,83,.15);backgr
       <div class="sponsor-tier-label">Platinum</div>
       <div class="sponsor-logos">
         <div class="sponsor-logo-card">
-          <img src="/public/CREALITY_LOGO.png" alt="Creality" loading="lazy">
+          <img src="/public/CREALITY_LOGO.png" alt="Creality" loading="lazy" width="1920" height="671" style="aspect-ratio:1920/671">
         </div>
         <div class="sponsor-logo-card">
-          <img src="/public/WOL3D-Logo-Branding-final-01.png" alt="Wol3D" loading="lazy">
+          <img src="/public/WOL3D-Logo-Branding-final-01.png" alt="Wol3D" loading="lazy" width="2793" height="1214" style="aspect-ratio:2793/1214">
         </div>
       </div>
     </div>
@@ -1154,16 +1163,20 @@ footer { padding:48px 48px 36px;border-top:2px solid rgba(212,168,83,.15);backgr
 <style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;}</style>
 
 <script>
-// CURSOR
+// CURSOR — mouse only, skip on touch devices
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursorRing');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.transform=`translate(${mx-4}px,${my-4}px)`;});
-(function animRing(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.transform=`translate(${rx-18}px,${ry-18}px)`;requestAnimationFrame(animRing);})();
-document.querySelectorAll('a,button,.tier-card,.stat-card,.achievement-card,.subsystem-card,.contact-detail,.team-member,.timeline-item,.inkind-item').forEach(el=>{
-  el.addEventListener('mouseenter',()=>ring.classList.add('hovering'));
-  el.addEventListener('mouseleave',()=>ring.classList.remove('hovering'));
-});
+if(window.matchMedia('(pointer: fine)').matches){
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.transform=`translate(${mx-4}px,${my-4}px)`;});
+  (function animRing(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.transform=`translate(${rx-18}px,${ry-18}px)`;requestAnimationFrame(animRing);})();
+  document.querySelectorAll('a,button,.tier-card,.stat-card,.achievement-card,.subsystem-card,.contact-detail,.team-member,.timeline-item,.inkind-item').forEach(el=>{
+    el.addEventListener('mouseenter',()=>ring.classList.add('hovering'));
+    el.addEventListener('mouseleave',()=>ring.classList.remove('hovering'));
+  });
+}else{
+  cursor.style.display='none';ring.style.display='none';
+}
 
 // COSMOS (star background)
 const canvas=document.getElementById('cosmos');
