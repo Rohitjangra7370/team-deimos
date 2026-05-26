@@ -355,6 +355,15 @@ section { position:relative;z-index:10; }
 .sponsor-wall-empty-text { font-family:var(--mono);font-size:12px;color:var(--dust-muted);line-height:1.8;letter-spacing:.05em; }
 .sponsor-wall-empty-cta { display:inline-block;margin-top:24px;font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;padding:12px 28px;border:1px solid var(--oxide);color:var(--oxide);text-decoration:none;transition:all .2s;min-height:44px;display:inline-flex;align-items:center; }
 .sponsor-wall-empty-cta:hover { background:var(--oxide);color:var(--dust); }
+.sponsor-tier { margin-bottom:48px; }
+.sponsor-tier-label { font-family:var(--mono);font-size:9px;letter-spacing:.3em;color:#c9d4dc;text-transform:uppercase;margin-bottom:24px;display:flex;align-items:center;gap:10px; }
+.sponsor-tier-label::before { content:'//';color:rgba(201,212,220,.4); }
+.sponsor-tier-label::after { content:'';flex:1;height:1px;background:rgba(201,212,220,.15); }
+.sponsor-logos { display:flex;flex-wrap:wrap;gap:24px;align-items:center; }
+.sponsor-logo-card { background:rgba(255,255,255,.04);border:1px solid rgba(201,212,220,.15);padding:32px 48px;display:flex;align-items:center;justify-content:center;transition:border-color .2s,background .2s;min-width:220px;flex:1;max-width:360px; }
+.sponsor-logo-card:hover { border-color:rgba(201,212,220,.4);background:rgba(255,255,255,.07); }
+.sponsor-logo-card img { max-height:64px;max-width:240px;width:auto;filter:brightness(0) invert(1);opacity:.85;transition:opacity .2s; }
+.sponsor-logo-card:hover img { opacity:1; }
 
 /* ═══ TRUST ═══ */
 #trust { padding:72px 48px;border-top:1px solid rgba(212,168,83,.06);border-bottom:1px solid rgba(212,168,83,.06); }
@@ -454,6 +463,8 @@ footer { padding:48px 48px 36px;border-top:2px solid rgba(212,168,83,.15);backgr
   .nav-links { display:none; }
   #hero,#stats,#achievements,#benefits,#sponsorship,#countdown,#timeline,#roadmap,#mediaplan,#team,#contact,#reach,#inkind,#sponsors,#trust { padding:80px 24px; }
   .stats-grid,.tiers-grid,.achievements-grid,.team-subsystems { grid-template-columns:1fr; }
+  .sponsor-logos { flex-direction:column; }
+  .sponsor-logo-card { max-width:100%;min-width:unset; }
   .countdown-grid { flex-wrap:wrap; }
   footer { grid-template-columns:1fr;gap:20px;text-align:center;padding:40px 24px 28px; }
   .footer-social { flex-wrap:wrap;justify-content:center;gap:12px; }
@@ -1001,16 +1012,18 @@ footer { padding:48px 48px 36px;border-top:2px solid rgba(212,168,83,.15);backgr
 <section id="sponsors" aria-labelledby="sponsors-heading">
   <div class="section-label">Partners</div>
   <h2 class="section-title reveal" id="sponsors-heading">Our Sponsors</h2>
-  <p class="section-subtitle reveal">Join the companies backing India's next generation of Mars engineers. Your logo will appear here.</p>
+  <p class="section-subtitle reveal">The companies backing India's next generation of Mars engineers.</p>
   <div class="sponsor-wall reveal">
-    <div class="sponsor-wall-empty">
-      <div class="sponsor-wall-empty-title">Be Our First Sponsor</div>
-      <div class="sponsor-wall-empty-text">
-        This wall is reserved for companies who believe in STEM, engineering excellence,<br>
-        and putting their brand on a rover competing internationally.<br>
-        Your logo goes here — visible to every visitor and every sponsor who follows.
+    <div class="sponsor-tier">
+      <div class="sponsor-tier-label">Platinum</div>
+      <div class="sponsor-logos">
+        <div class="sponsor-logo-card">
+          <img src="/CREALITY_LOGO.png" alt="Creality" loading="lazy">
+        </div>
+        <div class="sponsor-logo-card">
+          <img src="/WOL3D-Logo-Branding-final-01.png" alt="Wol3D" loading="lazy">
+        </div>
       </div>
-      <a href="#contact" class="sponsor-wall-empty-cta">Claim Your Spot →</a>
     </div>
   </div>
 </section>
