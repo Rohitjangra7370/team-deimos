@@ -469,6 +469,7 @@ footer { padding:48px 48px 36px;border-top:2px solid rgba(212,168,83,.15);backgr
   footer { grid-template-columns:1fr;gap:20px;text-align:center;padding:40px 24px 28px; }
   .footer-social { flex-wrap:wrap;justify-content:center;gap:12px; }
   .footer-copy { text-align:center; }
+  .footer-copy div { justify-content:center!important; }
   .form-row { grid-template-columns:1fr; }
   .team-grid { grid-template-columns:repeat(4,1fr); }
   .reach-stats { grid-template-columns:1fr 1fr; }
@@ -1141,7 +1142,13 @@ footer { padding:48px 48px 36px;border-top:2px solid rgba(212,168,83,.15);backgr
       Robotronics Club
     </a>
   </div>
-  <div class="footer-copy">© 2026 Team Deimos · IIT Mandi</div>
+  <div class="footer-copy">
+    © 2026 Team Deimos · IIT Mandi
+    <div style="margin-top:8px;display:flex;gap:20px;justify-content:flex-end;flex-wrap:wrap;">
+      <a href="/privacy.html" style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--dust-muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--signal)'" onmouseout="this.style.color='var(--dust-muted)'">Privacy Policy</a>
+      <a href="/terms.html" style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--dust-muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--signal)'" onmouseout="this.style.color='var(--dust-muted)'">Terms of Use</a>
+    </div>
+  </div>
 </footer>
 
 <style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;}</style>

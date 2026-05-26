@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy · Team Deimos · IIT Mandi</title>
+<meta name="description" content="Privacy Policy for Team Deimos sponsorship website. How we collect, use, and protect your personal data.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #080810;
+  --void-2: #0e0e1a;
+  --void-3: #14141f;
+  --oxide: #c14412;
+  --oxide-dim: #8b3010;
+  --signal: #d4a853;
+  --signal-dim: #a07838;
+  --dust: #f5f0e8;
+  --dust-dim: #b8b3ab;
+  --dust-muted: #6e6b65;
+  --grid: rgba(212,168,83,0.06);
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Space Grotesk', sans-serif;
+  --body: 'Instrument Sans', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body { background: var(--void); color: var(--dust); font-family: var(--body); overflow-x: hidden; line-height: 1.7; }
+
+body::before { content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4; }
+
+/* SKIP LINK */
+.skip-link { position:absolute;top:-40px;left:0;background:var(--oxide);color:var(--dust);padding:8px 16px;z-index:10000;font-family:var(--mono);font-size:12px;text-decoration:none; }
+.skip-link:focus { top:0; }
+
+/* NAV */
+nav { position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to bottom,rgba(8,8,16,.95),transparent);backdrop-filter:blur(12px);border-bottom:1px solid rgba(212,168,83,.08); }
+.nav-logo { font-family:var(--mono);font-size:13px;letter-spacing:.2em;color:var(--signal);text-decoration:none;display:flex;align-items:center;gap:12px; }
+.nav-logo-dot { width:8px;height:8px;border-radius:50%;background:var(--oxide); }
+.nav-back { font-family:var(--mono);font-size:11px;letter-spacing:.15em;color:var(--dust-muted);text-decoration:none;transition:color .2s;text-transform:uppercase;display:flex;align-items:center;gap:8px; }
+.nav-back:hover { color:var(--signal); }
+
+/* LAYOUT */
+main { position:relative;z-index:1;max-width:760px;margin:0 auto;padding:140px 48px 80px; }
+
+/* HEADER */
+.page-label { font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--oxide);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px; }
+.page-label::before { content:'//';color:var(--oxide-dim); }
+h1 { font-family:var(--sans);font-size:clamp(28px,4vw,44px);font-weight:700;color:var(--dust);letter-spacing:-.02em;line-height:1.1;margin-bottom:12px; }
+.page-meta { font-family:var(--mono);font-size:11px;color:var(--dust-muted);letter-spacing:.1em;margin-bottom:56px;padding-bottom:32px;border-bottom:1px solid rgba(212,168,83,.1); }
+
+/* CONTENT */
+.legal-section { margin-bottom:48px; }
+h2 { font-family:var(--sans);font-size:18px;font-weight:600;color:var(--dust);margin-bottom:16px;padding-top:8px; }
+h2::before { content:'— ';color:var(--oxide);font-family:var(--mono); }
+p { color:var(--dust-dim);font-size:15px;margin-bottom:14px;max-width:680px; }
+ul { color:var(--dust-dim);font-size:15px;padding-left:20px;margin-bottom:14px;max-width:680px; }
+li { margin-bottom:8px; }
+a { color:var(--signal);text-decoration:none;border-bottom:1px solid rgba(212,168,83,.3);transition:border-color .2s; }
+a:hover { border-color:var(--signal); }
+.highlight { background:rgba(193,68,18,.08);border-left:2px solid var(--oxide);padding:14px 20px;margin-bottom:20px;font-size:14px;color:var(--dust-dim);font-family:var(--mono);letter-spacing:.03em;line-height:1.7; }
+
+/* FOOTER */
+footer { position:relative;z-index:1;text-align:center;padding:32px 48px;border-top:1px solid rgba(212,168,83,.08);margin-top:40px; }
+.footer-copy { font-family:var(--mono);font-size:11px;color:var(--dust-muted);letter-spacing:.1em; }
+.footer-links { display:flex;gap:24px;justify-content:center;margin-top:12px; }
+.footer-links a { font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--dust-muted);text-decoration:none;border:none;transition:color .2s; }
+.footer-links a:hover { color:var(--signal); }
+
+@media(max-width:768px) {
+  nav { padding:16px 24px; }
+  main { padding:120px 24px 60px; }
+  footer { padding:28px 24px; }
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav role="navigation" aria-label="Site navigation">
+  <a href="/" class="nav-logo" aria-label="Team Deimos home"><div class="nav-logo-dot" aria-hidden="true"></div>TEAM·DEIMOS</a>
+  <a href="/" class="nav-back" aria-label="Back to main site">← Back to site</a>
+</nav>
+
+<main id="main">
+  <div class="page-label">Legal</div>
+  <h1>Privacy Policy</h1>
+  <p class="page-meta">Last updated: May 2026 &nbsp;·&nbsp; Effective: May 2026</p>
+
+  <div class="highlight">
+    This website is operated by Team Deimos, a student team registered under the Dean of Student Affairs, IIT Mandi (H.P., India). We collect minimal data and use it only to respond to sponsorship enquiries.
+  </div>
+
+  <div class="legal-section">
+    <h2>What We Collect</h2>
+    <p>When you submit our contact form, we collect:</p>
+    <ul>
+      <li>Full name</li>
+      <li>Business email address</li>
+      <li>Company or organisation name</li>
+      <li>Your message</li>
+    </ul>
+    <p>We do not collect payment information, government IDs, or any sensitive personal data. We do not use third-party tracking pixels or behavioural advertising tools.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>How We Use Your Data</h2>
+    <p>Information submitted through the contact form is used solely to:</p>
+    <ul>
+      <li>Respond to your sponsorship or partnership enquiry</li>
+      <li>Send you our sponsorship brochure or follow-up materials you request</li>
+      <li>Communicate about a potential or existing sponsorship agreement</li>
+    </ul>
+    <p>We will not use your data for marketing unrelated to Team Deimos sponsorship, and we will not sell, rent, or trade your information to any third party.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>Data Storage &amp; Processors</h2>
+    <p>We use the following third-party services to operate this website:</p>
+    <ul>
+      <li><strong style="color:var(--dust)">Supabase</strong> — stores contact form submissions. Data is hosted on servers in the United States. Supabase is GDPR-compliant. (<a href="https://supabase.com/privacy" target="_blank" rel="noopener">Privacy Policy</a>)</li>
+      <li><strong style="color:var(--dust)">Resend</strong> — delivers email notifications to our team when a form is submitted. Your message may pass through Resend's servers. (<a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a>)</li>
+      <li><strong style="color:var(--dust)">Vercel</strong> — hosts this website. Vercel may log standard server access data (IP address, browser type, request time) for security and reliability purposes. (<a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a>)</li>
+    </ul>
+  </div>
+
+  <div class="legal-section">
+    <h2>Cookies</h2>
+    <p>This website does not use cookies for analytics or advertising. Vercel and Supabase may set strictly necessary technical cookies required for the site to function. These cookies do not track you across websites.</p>
+    <p>You may disable cookies in your browser settings. This will not affect your ability to read the site, but the contact form may not function correctly.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>Data Retention</h2>
+    <p>Contact form submissions are retained for a maximum of 24 months from the date of submission, or until the conclusion of any sponsorship relationship, whichever is later. Submissions with no further correspondence are deleted after 12 months.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>Your Rights</h2>
+    <p>You have the right to:</p>
+    <ul>
+      <li>Request access to the personal data we hold about you</li>
+      <li>Request correction of inaccurate data</li>
+      <li>Request deletion of your data (subject to any legal obligation to retain it)</li>
+      <li>Withdraw consent to further communication at any time</li>
+    </ul>
+    <p>To exercise any of these rights, email us at the address below. We will respond within 30 days.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>Governing Law</h2>
+    <p>This Privacy Policy is governed by the Information Technology Act, 2000 and the Information Technology (Reasonable Security Practices and Procedures and Sensitive Personal Data or Information) Rules, 2011 of India. Any disputes shall be subject to the jurisdiction of courts in Himachal Pradesh, India.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>Contact</h2>
+    <p>For privacy-related queries or data requests, contact:</p>
+    <div class="highlight">
+      Team Deimos — Sponsorship &amp; Outreach<br>
+      IIT Mandi, Kamand, Mandi — 175075, Himachal Pradesh, India<br>
+      Email: <a href="mailto:rohitjangra7370@gmail.com">rohitjangra7370@gmail.com</a>
+    </div>
+  </div>
+</main>
+
+<footer role="contentinfo">
+  <div class="footer-copy">© 2026 Team Deimos · IIT Mandi</div>
+  <div class="footer-links">
+    <a href="/privacy.html" aria-current="page">Privacy Policy</a>
+    <a href="/terms.html">Terms of Use</a>
+    <a href="/">Home</a>
+  </div>
+</footer>
+</body>
+</html>
